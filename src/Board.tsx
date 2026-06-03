@@ -1,32 +1,20 @@
 import { Text, View } from "react-native";
-import { Grid } from "./Types";
+import { Cell } from "./Types";
 
 const CELL_SIZE = 64;
 
-const GRID_DATA: (number | null)[][] = [
-  [1, null, null, null, null],
-  [null, null, null, null, null],
-  [null, null, 3, null, null],
-  [null, null, null, null, null],
-  [null, null, null, null, 2],
-];
+interface BoardProps {
+  cells: Cell[][];
+}
 
-const buildGrid = (data: (number | null)[][]): Grid => {
-  return data.map((row, i) =>
-    row.map((value, j) => ({ row: i, col: j, value })),
-  );
-};
-
-const grid: Grid = buildGrid(GRID_DATA);
-
-export const Board = () => {
+export const Board = ({ cells }: BoardProps) => {
   return (
     <View>
-      {grid.map((row, r) => (
-        <View key={r} style={{ flexDirection: "row" }}>
-          {row.map((cell) => (
+      {cells.map((row, i) => (
+        <View key={i} style={{ flexDirection: "row" }}>
+          {row.map((cell, j) => (
             <View
-              key={cell.col}
+              key={j}
               style={{
                 width: CELL_SIZE,
                 height: CELL_SIZE,
