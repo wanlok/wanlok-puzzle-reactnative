@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useWindowDimensions } from "react-native";
-import { Board } from "./Board";
+import { GameBoard } from "./GameBoard";
 import { Cell } from "./Types";
-import { Dummy } from "./Dummy";
+import { WContainer } from "./Dummy";
 
 const GRID_DATA: (number | null)[][] = [
   [1, null, null, null, null],
@@ -33,20 +33,20 @@ export const App = () => {
           justifyContent: "center",
         }}
       >
-        <Dummy isLandscape={isLandscape}>
+        <WContainer isLandscape={isLandscape}>
           <Text>Left</Text>
-        </Dummy>
-        <Board
+        </WContainer>
+        <GameBoard
           cells={buildCells(GRID_DATA)}
-          width={boardWidth}
+          size={boardWidth}
           style={{
             width: boardWidth,
             height: boardWidth,
           }}
         />
-        <Dummy isLandscape={isLandscape}>
+        <WContainer isLandscape={isLandscape}>
           <Text>Right</Text>
-        </Dummy>
+        </WContainer>
       </View>
     </>
   );

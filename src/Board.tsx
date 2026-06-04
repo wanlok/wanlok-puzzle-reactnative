@@ -3,15 +3,11 @@ import { Cell } from "./Types";
 
 interface BoardProps {
   cells: Cell[][];
-  width: number;
+  cellWidth: number;
   style?: StyleProp<ViewStyle>;
 }
 
-export const Board = ({ cells, width, style }: BoardProps) => {
-  const numCols = cells[0]?.length ?? 1;
-  const numRows = cells.length;
-  const cellWidth = width / Math.max(numCols, numRows);
-
+export const Board = ({ cells, cellWidth, style }: BoardProps) => {
   return (
     <View style={style}>
       {cells.map((row, i) => (
