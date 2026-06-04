@@ -8,7 +8,7 @@ export const WContainer = ({
   return (
     <View
       style={[
-        { backgroundColor: "red", padding: 16, alignItems: "center" },
+        { backgroundColor: "blue", padding: 16, alignItems: "center" },
         isLandscape ? { flex: 1 } : { alignSelf: "stretch" },
       ]}
     >

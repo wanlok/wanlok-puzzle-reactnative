@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { Text, View, useWindowDimensions } from "react-native";
-import { GameBoard } from "./GameBoard";
+import { Button, Text, View, useWindowDimensions } from "react-native";
+import { Game } from "./Game";
 import { Cell } from "./Types";
 import { WContainer } from "./Dummy";
 
@@ -36,7 +36,7 @@ export const App = () => {
         <WContainer isLandscape={isLandscape}>
           <Text>Left</Text>
         </WContainer>
-        <GameBoard
+        <Game
           cells={buildCells(GRID_DATA)}
           size={boardWidth}
           style={{
@@ -46,6 +46,7 @@ export const App = () => {
         />
         <WContainer isLandscape={isLandscape}>
           <Text>Right</Text>
+          <Button title="Reset" />
         </WContainer>
       </View>
     </>
