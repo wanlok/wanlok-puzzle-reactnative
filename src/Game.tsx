@@ -1,51 +1,63 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { PanResponder, StyleProp, View, ViewStyle } from "react-native";
 import { Board } from "./Board";
 import { PathOverlay } from "./PathOverlay";
 import { Cell, Position } from "./Types";
+import { getPosition } from "./utilities/getPosition";
 
 interface GameProps {
   cells: Cell[][];
-  size: number;
+  updateCells: (cells: Cell[][]) => void;
+  boardWidth: number;
   style?: StyleProp<ViewStyle>;
 }
 
-export const Game = ({ cells, size, style }: GameProps) => {
-  const numberOfColumns = cells[0]?.length ?? 1;
+const withPathSequence = (
+  cells: Cell[][],
+  position: Position,
+  pathSequence: number | null,
+): Cell[][] => {
+  return cells.map((row, r) =>
+    row.map((cell, c) =>
+      r === position.row && c === position.column
+        ? { ...cell, pathSequence }
+        : cell,
+    ),
+  );
+};
+
+const getPath = (cells: Cell[][]): Position[] => {
+  return cells
+    .flatMap((row, r) => row.map((cell, c) => ({ cell, row: r, column: c })))
+    .filter(({ cell }) => cell.pathSequence !== null)
+    .sort((a, b) => (a.cell.pathSequence as number) - (b.cell.pathSequence as number))
+    .map(({ row, column }) => ({ row, column }));
+};
+
+export const Game = ({ cells, updateCells, boardWidth, style }: GameProps) => {
   const numberOfRows = cells.length;
-  const cellWidth = size / Math.max(numberOfColumns, numberOfRows);
+  const numberOfColumns = cells[0]?.length ?? 1;
+  const cellWidth = boardWidth / Math.max(numberOfColumns, numberOfRows);
 
-  const [path, setPath] = useState<Position[]>([]);
-  const pathRef = useRef<Position[]>([]);
-
-  const positionAt = (x: number, y: number): Position | null => {
-    const column = Math.floor(x / cellWidth);
-    const row = Math.floor(y / cellWidth);
-    if (
-      row >= 0 &&
-      row < numberOfRows &&
-      column >= 0 &&
-      column < numberOfColumns
-    ) {
-      return { row, column };
-    }
-    return null;
-  };
-
-  const isInPath = (position: Position, currentPath: Position[]) =>
-    currentPath.some(
-      (p) => p.row === position.row && p.column === position.column,
-    );
+  const cellsRef = useRef<Cell[][]>([]);
+  cellsRef.current = cells;
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: (e) => {
         const { locationX, locationY } = e.nativeEvent;
-        const position = positionAt(locationX, locationY);
+        const position = getPosition(
+          locationX,
+          locationY,
+          numberOfRows,
+          numberOfColumns,
+          cellWidth,
+        );
         if (!position) {
           return false;
         }
-        const lastPosition = pathRef.current[pathRef.current.length - 1];
+        const currentPath = getPath(cellsRef.current);
+        const lastPosition = currentPath[currentPath.length - 1];
         return (
           !lastPosition ||
           (lastPosition.row === position.row &&
@@ -55,18 +67,53 @@ export const Game = ({ cells, size, style }: GameProps) => {
       onMoveShouldSetPanResponder: () => false,
       onPanResponderGrant: (e) => {
         const { locationX, locationY } = e.nativeEvent;
-        const position = positionAt(locationX, locationY);
-        if (position && pathRef.current.length === 0) {
-          pathRef.current = [position];
-          setPath([position]);
+        const position = getPosition(
+          locationX,
+          locationY,
+          numberOfRows,
+          numberOfColumns,
+          cellWidth,
+        );
+        if (position && getPath(cellsRef.current).length === 0) {
+          updateCells(withPathSequence(cellsRef.current, position, 0));
         }
       },
       onPanResponderMove: (e) => {
         const { locationX, locationY } = e.nativeEvent;
-        const position = positionAt(locationX, locationY);
-        if (position && !isInPath(position, pathRef.current)) {
-          pathRef.current = [...pathRef.current, position];
-          setPath([...pathRef.current]);
+        const position = getPosition(
+          locationX,
+          locationY,
+          numberOfRows,
+          numberOfColumns,
+          cellWidth,
+        );
+        if (!position) {
+          return;
+        }
+        const currentPath = getPath(cellsRef.current);
+        const positionIndexInPath = currentPath.findIndex(
+          (p) => p.row === position.row && p.column === position.column,
+        );
+        if (positionIndexInPath === -1) {
+          const lastPosition = currentPath[currentPath.length - 1];
+          if (lastPosition) {
+            const rowDifference = Math.abs(position.row - lastPosition.row);
+            const columnDifference = Math.abs(
+              position.column - lastPosition.column,
+            );
+            const isAdjacentToLastCell =
+              (rowDifference === 1 && columnDifference === 0) ||
+              (rowDifference === 0 && columnDifference === 1);
+            if (!isAdjacentToLastCell) {
+              return;
+            }
+          }
+          updateCells(
+            withPathSequence(cellsRef.current, position, currentPath.length),
+          );
+        } else if (positionIndexInPath === currentPath.length - 2) {
+          const removedPosition = currentPath[currentPath.length - 1];
+          updateCells(withPathSequence(cellsRef.current, removedPosition, null));
         }
       },
       onPanResponderRelease: () => {},
@@ -78,7 +125,11 @@ export const Game = ({ cells, size, style }: GameProps) => {
       <View pointerEvents="none">
         <Board cells={cells} cellWidth={cellWidth} />
       </View>
-      <PathOverlay path={path} cellWidth={cellWidth} size={size} />
+      <PathOverlay
+        cells={cells}
+        cellWidth={cellWidth}
+        boardWidth={boardWidth}
+      />
     </View>
   );
 };

@@ -1,5 +1,6 @@
 export type Cell = {
-  value: number | null;
+  sequence: number | null;
+  pathSequence: number | null;
 };
 
 export type Position = {

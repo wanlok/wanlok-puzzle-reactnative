@@ -1,13 +1,23 @@
 import { Line, Svg } from "react-native-svg";
-import { Position } from "./Types";
+import { Cell, Position } from "./Types";
 
 interface PathOverlayProps {
-  path: Position[];
+  cells: Cell[][];
   cellWidth: number;
-  size: number;
+  boardWidth: number;
 }
 
-export const PathOverlay = ({ path, cellWidth, size }: PathOverlayProps) => {
+export const PathOverlay = ({
+  cells,
+  cellWidth,
+  boardWidth,
+}: PathOverlayProps) => {
+  const path: Position[] = cells
+    .flatMap((row, r) => row.map((cell, c) => ({ cell, row: r, column: c })))
+    .filter(({ cell }) => cell.pathSequence !== null)
+    .sort((a, b) => (a.cell.pathSequence as number) - (b.cell.pathSequence as number))
+    .map(({ row, column }) => ({ row, column }));
+
   const cellCenter = (pos: Position) => ({
     x: pos.column * cellWidth + cellWidth / 2,
     y: pos.row * cellWidth + cellWidth / 2,
@@ -16,8 +26,8 @@ export const PathOverlay = ({ path, cellWidth, size }: PathOverlayProps) => {
   return (
     <Svg
       style={{ position: "absolute", top: 0, left: 0 }}
-      width={size}
-      height={size}
+      width={boardWidth}
+      height={boardWidth}
       pointerEvents="none"
     >
       {path.slice(1).map((pos, i) => {

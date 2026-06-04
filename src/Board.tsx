@@ -24,8 +24,8 @@ export const Board = ({ cells, cellWidth, style }: BoardProps) => {
                 justifyContent: "center",
               }}
             >
-              {cell.value !== null && (
-                <Text style={{ fontSize: 20 }}>{cell.value}</Text>
+              {cell.sequence !== null && (
+                <Text style={{ fontSize: 20 }}>{cell.sequence}</Text>
               )}
             </View>
           ))}

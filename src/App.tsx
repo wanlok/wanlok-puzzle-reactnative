@@ -2,18 +2,37 @@ import { StatusBar } from "expo-status-bar";
 import { Button, Text, View, useWindowDimensions } from "react-native";
 import { Game } from "./Game";
 import { Cell } from "./Types";
-import { WContainer } from "./Dummy";
+import { WContainer } from "./WContainer";
+import { useState } from "react";
 
-const GRID_DATA: (number | null)[][] = [
-  [1, null, null, null, null],
-  [null, null, null, null, null],
-  [null, null, 3, null, null],
-  [null, null, null, null, null],
-  [null, null, null, null, 2],
-];
+const printPathSequence = (cells: Cell[][]) => {
+  for (let i = 0; i < cells.length; i++) {
+    const row: string[] = [];
+    for (let j = 0; j < cells[i].length; j++) {
+      const pathSequence = cells[i][j].pathSequence;
+      row.push(
+        pathSequence !== null
+          ? pathSequence < 10
+            ? ` ${pathSequence}`
+            : `${pathSequence}`
+          : "  ",
+      );
+    }
+    console.log(row.join(" "));
+  }
+};
 
-const buildCells = (data: (number | null)[][]): Cell[][] => {
-  return data.map((row) => row.map((value) => ({ value })));
+const buildCells = (dimension: number): Cell[][] => {
+  const data: (number | null)[][] = [
+    [1, null, null, null, null],
+    [null, null, null, null, null],
+    [null, null, 3, null, null],
+    [null, null, null, null, null],
+    [null, null, null, null, 2],
+  ];
+  return data.map((row) =>
+    row.map((sequence) => ({ sequence, pathSequence: null })),
+  );
 };
 
 export const App = () => {
@@ -21,6 +40,7 @@ export const App = () => {
   const isLandscape = windowWidth > windowHeight;
   const margin = 32;
   const boardWidth = Math.min(windowWidth, windowHeight) - margin * 2;
+  const [cells, setCells] = useState<Cell[][]>(buildCells(5));
 
   return (
     <>
@@ -37,8 +57,12 @@ export const App = () => {
           <Text>Left</Text>
         </WContainer>
         <Game
-          cells={buildCells(GRID_DATA)}
-          size={boardWidth}
+          cells={cells}
+          updateCells={(newCells) => {
+            printPathSequence(newCells);
+            setCells(newCells);
+          }}
+          boardWidth={boardWidth}
           style={{
             width: boardWidth,
             height: boardWidth,
