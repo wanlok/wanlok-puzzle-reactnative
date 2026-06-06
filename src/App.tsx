@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Main } from "./components/Main";
+import { Main } from "./screens/Main";
 
 export const App = () => {
   return (

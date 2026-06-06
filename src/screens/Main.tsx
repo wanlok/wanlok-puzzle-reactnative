@@ -1,8 +1,8 @@
 import { Button, Text, View } from "react-native";
-import { Container } from "./Container";
-import { BoardCanvas } from "./BoardCanvas";
+import { Container } from "../components/Container";
+import { BoardCanvas } from "../components/BoardCanvas";
 import { useMain } from "../hooks/useMain";
-import { GameModal } from "./GameModal";
+import { GameModal } from "../components/GameModal";
 
 export const Main = () => {
   const {
@@ -26,9 +26,7 @@ export const Main = () => {
           justifyContent: "center",
         }}
       >
-        <Container isLandscape={isLandscape}>
-          <Text>Left</Text>
-        </Container>
+        <Container isLandscape={isLandscape}></Container>
         <BoardCanvas
           cells={cells}
           updateCells={updateCells}

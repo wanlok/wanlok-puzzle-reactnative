@@ -14,7 +14,7 @@ export const Container = ({
   return (
     <View
       style={[
-        { backgroundColor: "blue", padding: 16, alignItems: "center" },
+        { padding: 16, alignItems: "center" },
         isLandscape ? { flex: 1 } : { alignSelf: "stretch" },
         style,
       ]}
