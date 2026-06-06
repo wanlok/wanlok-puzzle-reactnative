@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { View } from "react-native";
 
-export const WContainer = ({
+export const Container = ({
   isLandscape,
   children,
 }: PropsWithChildren<{ isLandscape: boolean }>) => {

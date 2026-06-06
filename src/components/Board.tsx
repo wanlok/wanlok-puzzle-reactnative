@@ -1,15 +1,14 @@
-import { StyleProp, Text, View, ViewStyle } from "react-native";
-import { Cell } from "./Types";
+import { Text, View } from "react-native";
+import { Cell } from "../Types";
 
 interface BoardProps {
   cells: Cell[][];
   cellWidth: number;
-  style?: StyleProp<ViewStyle>;
 }
 
-export const Board = ({ cells, cellWidth, style }: BoardProps) => {
+export const Board = ({ cells, cellWidth }: BoardProps) => {
   return (
-    <View style={style}>
+    <>
       {cells.map((row, i) => (
         <View key={i} style={{ flexDirection: "row" }}>
           {row.map((cell, j) => (
@@ -24,13 +23,13 @@ export const Board = ({ cells, cellWidth, style }: BoardProps) => {
                 justifyContent: "center",
               }}
             >
-              {cell.sequence !== null && (
-                <Text style={{ fontSize: 20 }}>{cell.sequence}</Text>
+              {cell.checkpoint !== null && (
+                <Text style={{ fontSize: 20 }}>{cell.checkpoint}</Text>
               )}
             </View>
           ))}
         </View>
       ))}
-    </View>
+    </>
   );
 };

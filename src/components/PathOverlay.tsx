@@ -1,5 +1,5 @@
 import { Line, Svg } from "react-native-svg";
-import { Cell, Position } from "./Types";
+import { Cell, Position } from "../Types";
 
 interface PathOverlayProps {
   cells: Cell[][];
@@ -13,9 +13,12 @@ export const PathOverlay = ({
   boardWidth,
 }: PathOverlayProps) => {
   const path: Position[] = cells
-    .flatMap((row, r) => row.map((cell, c) => ({ cell, row: r, column: c })))
+    .flatMap((row, i) => row.map((cell, j) => ({ cell, row: i, column: j })))
     .filter(({ cell }) => cell.pathSequence !== null)
-    .sort((a, b) => (a.cell.pathSequence as number) - (b.cell.pathSequence as number))
+    .sort(
+      (a, b) =>
+        (a.cell.pathSequence as number) - (b.cell.pathSequence as number),
+    )
     .map(({ row, column }) => ({ row, column }));
 
   const cellCenter = (pos: Position) => ({

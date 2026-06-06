@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { PanResponder, StyleProp, View, ViewStyle } from "react-native";
 import { Board } from "./Board";
 import { PathOverlay } from "./PathOverlay";
-import { Cell, Position } from "./Types";
-import { getPosition } from "./utilities/getPosition";
+import { Cell, Position } from "../Types";
+import { getPosition } from "../utilities/getPosition";
 
 interface GameProps {
   cells: Cell[][];
@@ -12,14 +12,14 @@ interface GameProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const withPathSequence = (
+const getUpdatedCells = (
   cells: Cell[][],
   position: Position,
   pathSequence: number | null,
 ): Cell[][] => {
-  return cells.map((row, r) =>
-    row.map((cell, c) =>
-      r === position.row && c === position.column
+  return cells.map((row, i) =>
+    row.map((cell, j) =>
+      i === position.row && j === position.column
         ? { ...cell, pathSequence }
         : cell,
     ),
@@ -28,13 +28,16 @@ const withPathSequence = (
 
 const getPath = (cells: Cell[][]): Position[] => {
   return cells
-    .flatMap((row, r) => row.map((cell, c) => ({ cell, row: r, column: c })))
+    .flatMap((row, i) => row.map((cell, j) => ({ cell, row: i, column: j })))
     .filter(({ cell }) => cell.pathSequence !== null)
-    .sort((a, b) => (a.cell.pathSequence as number) - (b.cell.pathSequence as number))
+    .sort(
+      (a, b) =>
+        (a.cell.pathSequence as number) - (b.cell.pathSequence as number),
+    )
     .map(({ row, column }) => ({ row, column }));
 };
 
-export const Game = ({ cells, updateCells, boardWidth, style }: GameProps) => {
+export const Game = ({ cells, updateCells, boardWidth }: GameProps) => {
   const numberOfRows = cells.length;
   const numberOfColumns = cells[0]?.length ?? 1;
   const cellWidth = boardWidth / Math.max(numberOfColumns, numberOfRows);
@@ -75,7 +78,7 @@ export const Game = ({ cells, updateCells, boardWidth, style }: GameProps) => {
           cellWidth,
         );
         if (position && getPath(cellsRef.current).length === 0) {
-          updateCells(withPathSequence(cellsRef.current, position, 0));
+          updateCells(getUpdatedCells(cellsRef.current, position, 0));
         }
       },
       onPanResponderMove: (e) => {
@@ -109,11 +112,11 @@ export const Game = ({ cells, updateCells, boardWidth, style }: GameProps) => {
             }
           }
           updateCells(
-            withPathSequence(cellsRef.current, position, currentPath.length),
+            getUpdatedCells(cellsRef.current, position, currentPath.length),
           );
         } else if (positionIndexInPath === currentPath.length - 2) {
           const removedPosition = currentPath[currentPath.length - 1];
-          updateCells(withPathSequence(cellsRef.current, removedPosition, null));
+          updateCells(getUpdatedCells(cellsRef.current, removedPosition, null));
         }
       },
       onPanResponderRelease: () => {},
@@ -121,7 +124,10 @@ export const Game = ({ cells, updateCells, boardWidth, style }: GameProps) => {
   ).current;
 
   return (
-    <View style={style} {...panResponder.panHandlers}>
+    <View
+      style={{ width: boardWidth, height: boardWidth }}
+      {...panResponder.panHandlers}
+    >
       <View pointerEvents="none">
         <Board cells={cells} cellWidth={cellWidth} />
       </View>
