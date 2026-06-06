@@ -1,17 +1,17 @@
 import { Line, Svg } from "react-native-svg";
 import { Cell, Position } from "../Types";
 
-interface PathOverlayProps {
+interface BoardPathProps {
   cells: Cell[][];
   cellWidth: number;
   boardWidth: number;
 }
 
-export const PathOverlay = ({
+export const BoardPath = ({
   cells,
   cellWidth,
   boardWidth,
-}: PathOverlayProps) => {
+}: BoardPathProps) => {
   const path: Position[] = cells
     .flatMap((row, i) => row.map((cell, j) => ({ cell, row: i, column: j })))
     .filter(({ cell }) => cell.pathSequence !== null)

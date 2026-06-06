@@ -119,26 +119,61 @@ const buildCells = (
   );
 };
 
+const checkWin = (cells: Cell[][]): boolean => {
+  const allCells = cells.flat();
+
+  if (allCells.some((cell) => cell.pathSequence === null)) {
+    return false;
+  }
+
+  const checkpoints = allCells
+    .filter((cell) => cell.checkpoint !== null)
+    .sort((a, b) => (a.checkpoint as number) - (b.checkpoint as number));
+
+  for (let i = 0; i < checkpoints.length - 1; i++) {
+    if (
+      (checkpoints[i].pathSequence as number) >=
+      (checkpoints[i + 1].pathSequence as number)
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const useMain = ({ margin }: { margin: number }) => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - margin * 2;
   const [cells, setCells] = useState<Cell[][]>(buildCells(5, 10));
+  const [isWon, setIsWon] = useState<boolean>(false);
 
   const updateCells = (newCells: Cell[][]) => {
     printPathSequence(newCells);
     setCells(newCells);
+    setIsWon(checkWin(newCells));
   };
 
   const resetCells = () => {
     setCells(
       cells.map((row) => row.map((cell) => ({ ...cell, pathSequence: null }))),
     );
+    setIsWon(false);
   };
 
-  const newGame = () => {
+  const newCells = () => {
     setCells(buildCells(5, 10));
+    setIsWon(false);
   };
 
-  return { cells, updateCells, resetCells, newGame, isLandscape, boardWidth };
+  return {
+    cells,
+    isWon,
+    isLandscape,
+    boardWidth,
+    updateCells,
+    resetCells,
+    newCells,
+  };
 };

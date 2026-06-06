@@ -1,11 +1,11 @@
 import { useRef } from "react";
 import { PanResponder, StyleProp, View, ViewStyle } from "react-native";
 import { Board } from "./Board";
-import { PathOverlay } from "./PathOverlay";
+import { BoardPath } from "./BoardPath";
 import { Cell, Position } from "../Types";
 import { getPosition } from "../utilities/getPosition";
 
-interface GameProps {
+interface BoardCanvasProps {
   cells: Cell[][];
   updateCells: (cells: Cell[][]) => void;
   boardWidth: number;
@@ -37,7 +37,11 @@ const getPath = (cells: Cell[][]): Position[] => {
     .map(({ row, column }) => ({ row, column }));
 };
 
-export const Game = ({ cells, updateCells, boardWidth }: GameProps) => {
+export const BoardCanvas = ({
+  cells,
+  updateCells,
+  boardWidth,
+}: BoardCanvasProps) => {
   const numberOfRows = cells.length;
   const numberOfColumns = cells[0]?.length ?? 1;
   const cellWidth = boardWidth / Math.max(numberOfColumns, numberOfRows);
@@ -131,11 +135,7 @@ export const Game = ({ cells, updateCells, boardWidth }: GameProps) => {
       <View pointerEvents="none">
         <Board cells={cells} cellWidth={cellWidth} />
       </View>
-      <PathOverlay
-        cells={cells}
-        cellWidth={cellWidth}
-        boardWidth={boardWidth}
-      />
+      <BoardPath cells={cells} cellWidth={cellWidth} boardWidth={boardWidth} />
     </View>
   );
 };
