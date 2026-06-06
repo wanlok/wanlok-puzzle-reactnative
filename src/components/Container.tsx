@@ -1,15 +1,22 @@
 import { PropsWithChildren } from "react";
-import { View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
+
+interface ContainerProps {
+  isLandscape: boolean;
+  style?: StyleProp<ViewStyle>;
+}
 
 export const Container = ({
   isLandscape,
+  style,
   children,
-}: PropsWithChildren<{ isLandscape: boolean }>) => {
+}: PropsWithChildren<ContainerProps>) => {
   return (
     <View
       style={[
         { backgroundColor: "blue", padding: 16, alignItems: "center" },
         isLandscape ? { flex: 1 } : { alignSelf: "stretch" },
+        style,
       ]}
     >
       {children}

@@ -29,8 +29,15 @@ export const Main = () => {
         <Container isLandscape={isLandscape}>
           <Text>Left</Text>
         </Container>
-        <BoardCanvas cells={cells} updateCells={updateCells} boardWidth={boardWidth} />
-        <Container isLandscape={isLandscape}>
+        <BoardCanvas
+          cells={cells}
+          updateCells={updateCells}
+          boardWidth={boardWidth}
+        />
+        <Container
+          isLandscape={isLandscape}
+          style={{ flexDirection: "row", gap: 16, justifyContent: "center" }}
+        >
           <Button title="New" onPress={newCells} />
           <Button title="Reset" onPress={resetCells} />
         </Container>
