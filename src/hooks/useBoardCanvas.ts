@@ -102,6 +102,9 @@ export const useBoardCanvas = ({
         }
       },
       onPanResponderMove: (e) => {
+        if (cellsRef.current.flat().every((cell) => cell.pathSequence !== null)) {
+          return;
+        }
         const { locationX, locationY } = e.nativeEvent;
         const position = getPosition(
           locationX,

@@ -94,15 +94,15 @@ const generatePath = (dimension: number): number[][] => {
 
 const buildCells = (
   dimension: number,
-  showNumberOfSequence: number,
+  numberOfCheckpoints: number,
 ): Cell[][] => {
   const total = dimension * dimension;
   const sortedVisibleSequences = Array.from(
-    { length: showNumberOfSequence },
+    { length: numberOfCheckpoints },
     (_, i) =>
-      showNumberOfSequence === 1
+      numberOfCheckpoints === 1
         ? 1
-        : Math.round((i * (total - 1)) / (showNumberOfSequence - 1)) + 1,
+        : Math.round((i * (total - 1)) / (numberOfCheckpoints - 1)) + 1,
   ).sort((first, second) => first - second);
   const visibleSequences = new Set(sortedVisibleSequences);
   const path = generatePath(dimension);
