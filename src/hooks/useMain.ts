@@ -92,26 +92,25 @@ const generatePath = (dimension: number): number[][] => {
   }
 };
 
-const buildCells = (
+const generateCells = (
   dimension: number,
   numberOfCheckpoints: number,
 ): Cell[][] => {
   const total = dimension * dimension;
-  const sortedVisibleSequences = Array.from(
+  const checkpointSequences = Array.from(
     { length: numberOfCheckpoints },
     (_, i) =>
       numberOfCheckpoints === 1
         ? 1
         : Math.round((i * (total - 1)) / (numberOfCheckpoints - 1)) + 1,
   ).sort((first, second) => first - second);
-  const visibleSequences = new Set(sortedVisibleSequences);
-  const path = generatePath(dimension);
-  return path.map((row) =>
+  const checkpoints = new Set(checkpointSequences);
+  return generatePath(dimension).map((row) =>
     row.map((sequence) => {
       return {
         sequence,
-        checkpoint: visibleSequences.has(sequence)
-          ? sortedVisibleSequences.indexOf(sequence) + 1
+        checkpoint: checkpoints.has(sequence)
+          ? checkpointSequences.indexOf(sequence) + 1
           : null,
         pathSequence: null,
       };
@@ -146,7 +145,7 @@ export const useMain = ({ margin }: { margin: number }) => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - margin * 2;
-  const [cells, setCells] = useState<Cell[][]>(buildCells(5, 10));
+  const [cells, setCells] = useState<Cell[][]>(generateCells(5, 10));
   const [isWon, setIsWon] = useState<boolean>(false);
 
   const updateCells = (newCells: Cell[][]) => {
@@ -162,8 +161,8 @@ export const useMain = ({ margin }: { margin: number }) => {
     setIsWon(false);
   };
 
-  const newCells = () => {
-    setCells(buildCells(5, 10));
+  const generateNewCells = () => {
+    setCells(generateCells(5, 10));
     setIsWon(false);
   };
 
@@ -174,6 +173,6 @@ export const useMain = ({ margin }: { margin: number }) => {
     boardWidth,
     updateCells,
     resetCells,
-    newCells,
+    generateNewCells,
   };
 };

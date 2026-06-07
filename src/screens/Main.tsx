@@ -9,7 +9,7 @@ export const Main = () => {
     cells,
     updateCells,
     resetCells,
-    newCells,
+    generateNewCells,
     isWon,
     isLandscape,
     boardWidth,
@@ -36,11 +36,11 @@ export const Main = () => {
           isLandscape={isLandscape}
           style={{ flexDirection: "row", gap: 16, justifyContent: "center" }}
         >
-          <Button title="New" onPress={newCells} />
+          <Button title="New" onPress={generateNewCells} />
           <Button title="Reset" onPress={resetCells} />
         </Container>
       </View>
-      <GameModal visible={isWon} text={"You won"} onButtonClick={newCells} />
+      <GameModal visible={isWon} text={"You won"} onButtonClick={generateNewCells} />
     </>
   );
 };
