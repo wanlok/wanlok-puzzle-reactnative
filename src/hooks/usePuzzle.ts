@@ -183,8 +183,8 @@ export const usePuzzle = () => {
   };
 
   return {
-    cells,
     seed,
+    cells,
     isWon,
     updateCells,
     resetCells,

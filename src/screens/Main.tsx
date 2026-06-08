@@ -10,7 +10,7 @@ export const Main = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - MARGIN * 2;
-  const { cells, seed, isWon, updateCells, resetCells, generateNewCells } =
+  const { seed, cells, isWon, updateCells, resetCells, generateNewCells } =
     usePuzzle();
   return (
     <>
