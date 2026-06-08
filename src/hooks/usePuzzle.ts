@@ -151,43 +151,38 @@ const checkWin = (cells: Cell[][]): boolean => {
   return true;
 };
 
-const generateSeed = () => {
-  return Math.floor(Math.random() * 2 ** 32);
-};
-
-export const usePuzzle = () => {
-  const [seed, setSeed] = useState<number>(() => generateSeed());
-  const [cells, setCells] = useState<Cell[][]>(() =>
+export const usePuzzle = (initialSeed: number) => {
+  const [seed, setSeed] = useState<number>(initialSeed);
+  const [puzzle, setPuzzle] = useState<Cell[][]>(() =>
     generateCells(5, seed, 10),
   );
   const [isWon, setIsWon] = useState<boolean>(false);
 
-  const updateCells = (newCells: Cell[][]) => {
+  const updatePuzzle = (newCells: Cell[][]) => {
     printPathSequence(newCells);
-    setCells(newCells);
+    setPuzzle(newCells);
     setIsWon(checkWin(newCells));
   };
 
-  const resetCells = () => {
-    setCells(
-      cells.map((row) => row.map((cell) => ({ ...cell, pathSequence: null }))),
+  const resetPuzzle = () => {
+    setPuzzle(
+      puzzle.map((row) => row.map((cell) => ({ ...cell, pathSequence: null }))),
     );
     setIsWon(false);
   };
 
-  const generateNewCells = () => {
-    const newSeed = generateSeed();
+  const generateNewPuzzle = (newSeed: number) => {
     setSeed(newSeed);
-    setCells(generateCells(5, newSeed, 10));
+    setPuzzle(generateCells(5, newSeed, 10));
     setIsWon(false);
   };
 
   return {
     seed,
-    cells,
+    puzzle,
     isWon,
-    updateCells,
-    resetCells,
-    generateNewCells,
+    updatePuzzle,
+    resetPuzzle,
+    generateNewPuzzle,
   };
 };

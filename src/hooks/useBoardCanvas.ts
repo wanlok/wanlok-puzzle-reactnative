@@ -49,13 +49,13 @@ const getPath = (cells: Cell[][]): Position[] => {
 
 interface UseBoardCanvasProps {
   cells: Cell[][];
-  updateCells: (cells: Cell[][]) => void;
+  updatePuzzle: (cells: Cell[][]) => void;
   boardWidth: number;
 }
 
 export const useBoardCanvas = ({
   cells,
-  updateCells,
+  updatePuzzle,
   boardWidth,
 }: UseBoardCanvasProps) => {
   const numberOfRows = cells.length;
@@ -94,7 +94,7 @@ export const useBoardCanvas = ({
         cellWidth,
       );
       if (position && getPath(cells).length === 0) {
-        updateCells(getUpdatedCells(cells, position, 0));
+        updatePuzzle(getUpdatedCells(cells, position, 0));
       }
     },
     onPanResponderMove: (e) => {
@@ -130,12 +130,12 @@ export const useBoardCanvas = ({
             return;
           }
         }
-        updateCells(
+        updatePuzzle(
           getUpdatedCells(cells, position, currentPath.length),
         );
       } else if (positionIndexInPath === currentPath.length - 2) {
         const removedPosition = currentPath[currentPath.length - 1];
-        updateCells(getUpdatedCells(cells, removedPosition, null));
+        updatePuzzle(getUpdatedCells(cells, removedPosition, null));
       }
     },
     onPanResponderRelease: () => {},

@@ -10,8 +10,8 @@ export const Main = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - MARGIN * 2;
-  const { seed, cells, isWon, updateCells, resetCells, generateNewCells } =
-    usePuzzle();
+  const { seed, puzzle, isWon, updatePuzzle, resetPuzzle, generateNewPuzzle } =
+    usePuzzle(27);
   return (
     <>
       <View
@@ -26,8 +26,8 @@ export const Main = () => {
           <Text>Seed: {seed}</Text>
         </Container>
         <BoardCanvas
-          cells={cells}
-          updateCells={updateCells}
+          cells={puzzle}
+          updatePuzzle={updatePuzzle}
           boardWidth={boardWidth}
         />
         <Container
@@ -39,14 +39,14 @@ export const Main = () => {
             justifyContent: "center",
           }}
         >
-          <Button title="Reset" onPress={resetCells} />
-          <Button title="New" onPress={generateNewCells} />
+          <Button title="Reset" onPress={resetPuzzle} />
+          <Button title="New" onPress={() => generateNewPuzzle(28)} />
         </Container>
       </View>
       <GameModal
         visible={isWon}
         text={"You won"}
-        onButtonClick={generateNewCells}
+        onButtonClick={() => generateNewPuzzle(28)}
       />
     </>
   );
