@@ -1,22 +1,17 @@
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, useWindowDimensions } from "react-native";
 import { Container } from "../components/Container";
 import { BoardCanvas } from "../components/BoardCanvas";
-import { useMain } from "../hooks/useMain";
+import { usePuzzle } from "../hooks/usePuzzle";
 import { GameModal } from "../components/GameModal";
 
+const MARGIN = 40;
+
 export const Main = () => {
-  const {
-    cells,
-    seed,
-    updateCells,
-    resetCells,
-    generateNewCells,
-    isWon,
-    isLandscape,
-    boardWidth,
-  } = useMain({
-    margin: 40,
-  });
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const boardWidth = Math.min(width, height) - MARGIN * 2;
+  const { cells, seed, isWon, updateCells, resetCells, generateNewCells } =
+    usePuzzle();
   return (
     <>
       <View
@@ -44,8 +39,8 @@ export const Main = () => {
             justifyContent: "center",
           }}
         >
-          <Button title="New" onPress={generateNewCells} />
           <Button title="Reset" onPress={resetCells} />
+          <Button title="New" onPress={generateNewCells} />
         </Container>
       </View>
       <GameModal

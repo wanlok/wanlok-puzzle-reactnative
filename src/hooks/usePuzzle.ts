@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useWindowDimensions } from "react-native";
 import { Cell } from "../Types";
 
 const printPathSequence = (cells: Cell[][]) => {
@@ -156,10 +155,7 @@ const generateSeed = () => {
   return Math.floor(Math.random() * 2 ** 32);
 };
 
-export const useMain = ({ margin }: { margin: number }) => {
-  const { width, height } = useWindowDimensions();
-  const isLandscape = width > height;
-  const boardWidth = Math.min(width, height) - margin * 2;
+export const usePuzzle = () => {
   const [seed, setSeed] = useState<number>(() => generateSeed());
   const [cells, setCells] = useState<Cell[][]>(() =>
     generateCells(5, seed, 10),
@@ -190,8 +186,6 @@ export const useMain = ({ margin }: { margin: number }) => {
     cells,
     seed,
     isWon,
-    isLandscape,
-    boardWidth,
     updateCells,
     resetCells,
     generateNewCells,
