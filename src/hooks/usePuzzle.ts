@@ -145,6 +145,11 @@ const checkWin = (cells: Cell[][]): boolean => {
     }
   }
 
+  const lastCheckpoint = checkpoints[checkpoints.length - 1];
+  if ((lastCheckpoint.pathSequence as number) !== allCells.length - 1) {
+    return false;
+  }
+
   return true;
 };
 
@@ -176,6 +181,27 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     setIsWon(false);
   };
 
+  const restartPuzzle = () => {
+    generateNewPuzzle({
+      ...initialPuzzleSettings,
+      dimension: puzzleSettings.dimension,
+      numberOfCheckpoints: puzzleSettings.numberOfCheckpoints,
+    });
+  };
+
+  const onDimensionPickerValueChange = (dimension: number) => {
+    const maxNumberOfCheckpoints = Math.floor((dimension * dimension) / 2);
+    const numberOfCheckpoints = Math.min(
+      puzzleSettings.numberOfCheckpoints,
+      maxNumberOfCheckpoints,
+    );
+    generateNewPuzzle({ ...initialPuzzleSettings, dimension, numberOfCheckpoints });
+  };
+
+  const onNumberOfCheckpointsPickerValueChange = (numberOfCheckpoints: number) => {
+    generateNewPuzzle({ ...puzzleSettings, numberOfCheckpoints });
+  };
+
   return {
     puzzleSettings,
     puzzle,
@@ -183,5 +209,8 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     updatePuzzle,
     clearPuzzle,
     generateNewPuzzle,
+    restartPuzzle,
+    onDimensionPickerValueChange,
+    onNumberOfCheckpointsPickerValueChange,
   };
 };

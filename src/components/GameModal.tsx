@@ -3,10 +3,10 @@ import { Button, Modal, Text, View } from "react-native";
 interface GameModalProps {
   visible: boolean;
   text: string;
-  onButtonClick: () => void;
+  onButtonPress: () => void;
 }
 
-export const GameModal = ({ visible, text, onButtonClick }: GameModalProps) => {
+export const GameModal = ({ visible, text, onButtonPress }: GameModalProps) => {
   return (
     <Modal transparent visible={visible} animationType="slide">
       <View
@@ -29,7 +29,7 @@ export const GameModal = ({ visible, text, onButtonClick }: GameModalProps) => {
           }}
         >
           <Text>{text}</Text>
-          <Button title="Close" onPress={onButtonClick}></Button>
+          <Button title="Close" onPress={onButtonPress}></Button>
         </View>
       </View>
     </Modal>

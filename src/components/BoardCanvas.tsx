@@ -6,17 +6,20 @@ import { useBoardCanvas } from "../hooks/useBoardCanvas";
 
 interface BoardCanvasProps {
   cells: Cell[][];
+  isWon: boolean;
   updatePuzzle: (cells: Cell[][]) => void;
   boardWidth: number;
 }
 
 export const BoardCanvas = ({
   cells,
+  isWon,
   updatePuzzle,
   boardWidth,
 }: BoardCanvasProps) => {
   const { cellWidth, panHandlers } = useBoardCanvas({
     cells,
+    isWon,
     updatePuzzle,
     boardWidth,
   });

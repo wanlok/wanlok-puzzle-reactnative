@@ -1,8 +1,10 @@
-import { Button, Text, View, useWindowDimensions } from "react-native";
-import { Container } from "../components/Container";
+import { View, useWindowDimensions } from "react-native";
 import { BoardCanvas } from "../components/BoardCanvas";
+import { BottomContainer } from "../components/BottomContainer";
 import { usePuzzle } from "../hooks/usePuzzle";
+import { useTimer } from "../hooks/useTimer";
 import { GameModal } from "../components/GameModal";
+import { TopContainer } from "../components/TopContainer";
 
 const MARGIN = 40;
 
@@ -24,7 +26,12 @@ export const Main = () => {
     updatePuzzle,
     clearPuzzle,
     generateNewPuzzle,
+    restartPuzzle,
+    onDimensionPickerValueChange,
+    onNumberOfCheckpointsPickerValueChange,
   } = usePuzzle(initialPuzzleSettings);
+
+  const { elapsedSeconds } = useTimer(puzzle, isWon);
 
   const showNextPuzzle = () => {
     const seed = puzzleSettings.seed + 1;
@@ -48,34 +55,29 @@ export const Main = () => {
           justifyContent: "center",
         }}
       >
-        <Container isLandscape={isLandscape}>
-          <Text>Puzzle {puzzleSettings.seed}</Text>
-        </Container>
+        <TopContainer
+          puzzleSettings={puzzleSettings}
+          elapsedSeconds={elapsedSeconds}
+          onDimensionPickerValueChange={onDimensionPickerValueChange}
+          onNumberOfCheckpointsPickerValueChange={
+            onNumberOfCheckpointsPickerValueChange
+          }
+        />
         <BoardCanvas
           cells={puzzle}
+          isWon={isWon}
           updatePuzzle={updatePuzzle}
           boardWidth={boardWidth}
         />
-        <Container
-          isLandscape={isLandscape}
-          style={{
-            flexDirection: "row",
-            gap: 16,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button title="Clear" onPress={clearPuzzle} />
-          <Button
-            title="Restart"
-            onPress={() => generateNewPuzzle(initialPuzzleSettings)}
-          />
-        </Container>
+        <BottomContainer
+          onClearButtonPress={clearPuzzle}
+          onRestartButtonPress={restartPuzzle}
+        />
       </View>
       <GameModal
         visible={isWon}
         text={"You won"}
-        onButtonClick={showNextPuzzle}
+        onButtonPress={showNextPuzzle}
       />
     </>
   );

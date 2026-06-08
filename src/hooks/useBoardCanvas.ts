@@ -49,12 +49,14 @@ const getPath = (cells: Cell[][]): Position[] => {
 
 interface UseBoardCanvasProps {
   cells: Cell[][];
+  isWon: boolean;
   updatePuzzle: (cells: Cell[][]) => void;
   boardWidth: number;
 }
 
 export const useBoardCanvas = ({
   cells,
+  isWon,
   updatePuzzle,
   boardWidth,
 }: UseBoardCanvasProps) => {
@@ -98,7 +100,7 @@ export const useBoardCanvas = ({
       }
     },
     onPanResponderMove: (e) => {
-      if (cells.flat().every((cell) => cell.pathSequence !== null)) {
+      if (isWon) {
         return;
       }
       const { locationX, locationY } = e.nativeEvent;
