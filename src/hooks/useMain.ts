@@ -19,7 +19,17 @@ const printPathSequence = (cells: Cell[][]) => {
   }
 };
 
-const generatePath = (dimension: number): number[][] => {
+const createRandom = (seed: number): (() => number) => {
+  let state = seed >>> 0;
+  return () => {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(state ^ (state >>> 15), 1 | state);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+const generatePath = (dimension: number, random: () => number): number[][] => {
   const directions: [number, number][] = [
     [-1, 0],
     [1, 0],
@@ -51,8 +61,8 @@ const generatePath = (dimension: number): number[][] => {
       new Array(dimension).fill(0),
     );
 
-    let currentRow = Math.floor(Math.random() * dimension);
-    let currentColumn = Math.floor(Math.random() * dimension);
+    let currentRow = Math.floor(random() * dimension);
+    let currentColumn = Math.floor(random() * dimension);
     grid[currentRow][currentColumn] = 1;
 
     let success = true;
@@ -79,7 +89,7 @@ const generatePath = (dimension: number): number[][] => {
         if (firstCount !== secondCount) {
           return firstCount - secondCount;
         }
-        return Math.random() - 0.5;
+        return random() - 0.5;
       });
 
       [currentRow, currentColumn] = neighbors[0];
@@ -94,6 +104,7 @@ const generatePath = (dimension: number): number[][] => {
 
 const generateCells = (
   dimension: number,
+  seed: number,
   numberOfCheckpoints: number,
 ): Cell[][] => {
   const total = dimension * dimension;
@@ -105,7 +116,7 @@ const generateCells = (
         : Math.round((i * (total - 1)) / (numberOfCheckpoints - 1)) + 1,
   ).sort((first, second) => first - second);
   const checkpoints = new Set(checkpointSequences);
-  return generatePath(dimension).map((row) =>
+  return generatePath(dimension, createRandom(seed)).map((row) =>
     row.map((sequence) => {
       return {
         sequence,
@@ -141,11 +152,18 @@ const checkWin = (cells: Cell[][]): boolean => {
   return true;
 };
 
+const generateSeed = () => {
+  return Math.floor(Math.random() * 2 ** 32);
+};
+
 export const useMain = ({ margin }: { margin: number }) => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - margin * 2;
-  const [cells, setCells] = useState<Cell[][]>(generateCells(5, 10));
+  const [seed, setSeed] = useState<number>(() => generateSeed());
+  const [cells, setCells] = useState<Cell[][]>(() =>
+    generateCells(5, seed, 10),
+  );
   const [isWon, setIsWon] = useState<boolean>(false);
 
   const updateCells = (newCells: Cell[][]) => {
@@ -162,12 +180,15 @@ export const useMain = ({ margin }: { margin: number }) => {
   };
 
   const generateNewCells = () => {
-    setCells(generateCells(5, 10));
+    const newSeed = generateSeed();
+    setSeed(newSeed);
+    setCells(generateCells(5, newSeed, 10));
     setIsWon(false);
   };
 
   return {
     cells,
+    seed,
     isWon,
     isLandscape,
     boardWidth,

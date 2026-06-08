@@ -7,6 +7,7 @@ import { GameModal } from "../components/GameModal";
 export const Main = () => {
   const {
     cells,
+    seed,
     updateCells,
     resetCells,
     generateNewCells,
@@ -26,7 +27,9 @@ export const Main = () => {
           justifyContent: "center",
         }}
       >
-        <Container isLandscape={isLandscape}></Container>
+        <Container isLandscape={isLandscape}>
+          <Text>Seed: {seed}</Text>
+        </Container>
         <BoardCanvas
           cells={cells}
           updateCells={updateCells}
@@ -34,13 +37,22 @@ export const Main = () => {
         />
         <Container
           isLandscape={isLandscape}
-          style={{ flexDirection: "row", gap: 16, justifyContent: "center" }}
+          style={{
+            flexDirection: "row",
+            gap: 16,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <Button title="New" onPress={generateNewCells} />
           <Button title="Reset" onPress={resetCells} />
         </Container>
       </View>
-      <GameModal visible={isWon} text={"You won"} onButtonClick={generateNewCells} />
+      <GameModal
+        visible={isWon}
+        text={"You won"}
+        onButtonClick={generateNewCells}
+      />
     </>
   );
 };

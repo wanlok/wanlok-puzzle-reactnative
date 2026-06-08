@@ -1,4 +1,4 @@
-import { useRef } from "react";
+
 import { PanResponder } from "react-native";
 import { Cell, Position } from "../Types";
 
@@ -62,89 +62,84 @@ export const useBoardCanvas = ({
   const numberOfColumns = cells[0]?.length ?? 1;
   const cellWidth = boardWidth / Math.max(numberOfColumns, numberOfRows);
 
-  const cellsRef = useRef<Cell[][]>([]);
-  cellsRef.current = cells;
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: (e) => {
-        const { locationX, locationY } = e.nativeEvent;
-        const position = getPosition(
-          locationX,
-          locationY,
-          numberOfRows,
-          numberOfColumns,
-          cellWidth,
-        );
-        if (!position) {
-          return false;
-        }
-        const currentPath = getPath(cellsRef.current);
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: (e) => {
+      const { locationX, locationY } = e.nativeEvent;
+      const position = getPosition(
+        locationX,
+        locationY,
+        numberOfRows,
+        numberOfColumns,
+        cellWidth,
+      );
+      if (!position) {
+        return false;
+      }
+      const currentPath = getPath(cells);
+      const lastPosition = currentPath[currentPath.length - 1];
+      return (
+        !lastPosition ||
+        (lastPosition.row === position.row &&
+          lastPosition.column === position.column)
+      );
+    },
+    onMoveShouldSetPanResponder: () => false,
+    onPanResponderGrant: (e) => {
+      const { locationX, locationY } = e.nativeEvent;
+      const position = getPosition(
+        locationX,
+        locationY,
+        numberOfRows,
+        numberOfColumns,
+        cellWidth,
+      );
+      if (position && getPath(cells).length === 0) {
+        updateCells(getUpdatedCells(cells, position, 0));
+      }
+    },
+    onPanResponderMove: (e) => {
+      if (cells.flat().every((cell) => cell.pathSequence !== null)) {
+        return;
+      }
+      const { locationX, locationY } = e.nativeEvent;
+      const position = getPosition(
+        locationX,
+        locationY,
+        numberOfRows,
+        numberOfColumns,
+        cellWidth,
+      );
+      if (!position) {
+        return;
+      }
+      const currentPath = getPath(cells);
+      const positionIndexInPath = currentPath.findIndex(
+        (p) => p.row === position.row && p.column === position.column,
+      );
+      if (positionIndexInPath === -1) {
         const lastPosition = currentPath[currentPath.length - 1];
-        return (
-          !lastPosition ||
-          (lastPosition.row === position.row &&
-            lastPosition.column === position.column)
-        );
-      },
-      onMoveShouldSetPanResponder: () => false,
-      onPanResponderGrant: (e) => {
-        const { locationX, locationY } = e.nativeEvent;
-        const position = getPosition(
-          locationX,
-          locationY,
-          numberOfRows,
-          numberOfColumns,
-          cellWidth,
-        );
-        if (position && getPath(cellsRef.current).length === 0) {
-          updateCells(getUpdatedCells(cellsRef.current, position, 0));
-        }
-      },
-      onPanResponderMove: (e) => {
-        if (cellsRef.current.flat().every((cell) => cell.pathSequence !== null)) {
-          return;
-        }
-        const { locationX, locationY } = e.nativeEvent;
-        const position = getPosition(
-          locationX,
-          locationY,
-          numberOfRows,
-          numberOfColumns,
-          cellWidth,
-        );
-        if (!position) {
-          return;
-        }
-        const currentPath = getPath(cellsRef.current);
-        const positionIndexInPath = currentPath.findIndex(
-          (p) => p.row === position.row && p.column === position.column,
-        );
-        if (positionIndexInPath === -1) {
-          const lastPosition = currentPath[currentPath.length - 1];
-          if (lastPosition) {
-            const rowDifference = Math.abs(position.row - lastPosition.row);
-            const columnDifference = Math.abs(
-              position.column - lastPosition.column,
-            );
-            const isAdjacentToLastCell =
-              (rowDifference === 1 && columnDifference === 0) ||
-              (rowDifference === 0 && columnDifference === 1);
-            if (!isAdjacentToLastCell) {
-              return;
-            }
-          }
-          updateCells(
-            getUpdatedCells(cellsRef.current, position, currentPath.length),
+        if (lastPosition) {
+          const rowDifference = Math.abs(position.row - lastPosition.row);
+          const columnDifference = Math.abs(
+            position.column - lastPosition.column,
           );
-        } else if (positionIndexInPath === currentPath.length - 2) {
-          const removedPosition = currentPath[currentPath.length - 1];
-          updateCells(getUpdatedCells(cellsRef.current, removedPosition, null));
+          const isAdjacentToLastCell =
+            (rowDifference === 1 && columnDifference === 0) ||
+            (rowDifference === 0 && columnDifference === 1);
+          if (!isAdjacentToLastCell) {
+            return;
+          }
         }
-      },
-      onPanResponderRelease: () => {},
-    }),
-  ).current;
+        updateCells(
+          getUpdatedCells(cells, position, currentPath.length),
+        );
+      } else if (positionIndexInPath === currentPath.length - 2) {
+        const removedPosition = currentPath[currentPath.length - 1];
+        updateCells(getUpdatedCells(cells, removedPosition, null));
+      }
+    },
+    onPanResponderRelease: () => {},
+  });
 
   return { cellWidth, panHandlers: panResponder.panHandlers };
 };
