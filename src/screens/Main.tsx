@@ -10,8 +10,34 @@ export const Main = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - MARGIN * 2;
-  const { seed, puzzle, isWon, updatePuzzle, resetPuzzle, generateNewPuzzle } =
-    usePuzzle(27);
+
+  const initialPuzzleSettings = {
+    dimension: 5,
+    seed: 1,
+    numberOfCheckpoints: 10,
+  };
+
+  const {
+    puzzleSettings,
+    puzzle,
+    isWon,
+    updatePuzzle,
+    clearPuzzle,
+    generateNewPuzzle,
+  } = usePuzzle(initialPuzzleSettings);
+
+  const showNextPuzzle = () => {
+    const seed = puzzleSettings.seed + 1;
+    generateNewPuzzle({
+      ...puzzleSettings,
+      seed,
+      numberOfCheckpoints:
+        seed % 11 === 0
+          ? puzzleSettings.numberOfCheckpoints - 1
+          : puzzleSettings.numberOfCheckpoints,
+    });
+  };
+
   return (
     <>
       <View
@@ -23,7 +49,7 @@ export const Main = () => {
         }}
       >
         <Container isLandscape={isLandscape}>
-          <Text>Seed: {seed}</Text>
+          <Text>Puzzle {puzzleSettings.seed}</Text>
         </Container>
         <BoardCanvas
           cells={puzzle}
@@ -39,14 +65,17 @@ export const Main = () => {
             justifyContent: "center",
           }}
         >
-          <Button title="Reset" onPress={resetPuzzle} />
-          <Button title="New" onPress={() => generateNewPuzzle(28)} />
+          <Button title="Clear" onPress={clearPuzzle} />
+          <Button
+            title="Restart"
+            onPress={() => generateNewPuzzle(initialPuzzleSettings)}
+          />
         </Container>
       </View>
       <GameModal
         visible={isWon}
         text={"You won"}
-        onButtonClick={() => generateNewPuzzle(28)}
+        onButtonClick={showNextPuzzle}
       />
     </>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Cell } from "../Types";
+import { Cell, PuzzleSettings } from "../Types";
 
 const printPathSequence = (cells: Cell[][]) => {
   for (let i = 0; i < cells.length; i++) {
@@ -101,11 +101,8 @@ const generatePath = (dimension: number, random: () => number): number[][] => {
   }
 };
 
-const generateCells = (
-  dimension: number,
-  seed: number,
-  numberOfCheckpoints: number,
-): Cell[][] => {
+const generatePuzzle = (puzzleSettings: PuzzleSettings): Cell[][] => {
+  const { dimension, seed, numberOfCheckpoints } = puzzleSettings;
   const total = dimension * dimension;
   const checkpointSequences = Array.from(
     { length: numberOfCheckpoints },
@@ -151,10 +148,12 @@ const checkWin = (cells: Cell[][]): boolean => {
   return true;
 };
 
-export const usePuzzle = (initialSeed: number) => {
-  const [seed, setSeed] = useState<number>(initialSeed);
+export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
+  const [puzzleSettings, setPuzzleSettings] = useState<PuzzleSettings>(
+    initialPuzzleSettings,
+  );
   const [puzzle, setPuzzle] = useState<Cell[][]>(() =>
-    generateCells(5, seed, 10),
+    generatePuzzle(puzzleSettings),
   );
   const [isWon, setIsWon] = useState<boolean>(false);
 
@@ -164,25 +163,25 @@ export const usePuzzle = (initialSeed: number) => {
     setIsWon(checkWin(newCells));
   };
 
-  const resetPuzzle = () => {
+  const clearPuzzle = () => {
     setPuzzle(
       puzzle.map((row) => row.map((cell) => ({ ...cell, pathSequence: null }))),
     );
     setIsWon(false);
   };
 
-  const generateNewPuzzle = (newSeed: number) => {
-    setSeed(newSeed);
-    setPuzzle(generateCells(5, newSeed, 10));
+  const generateNewPuzzle = (newPuzzleSettings: PuzzleSettings) => {
+    setPuzzleSettings(newPuzzleSettings);
+    setPuzzle(generatePuzzle(newPuzzleSettings));
     setIsWon(false);
   };
 
   return {
-    seed,
+    puzzleSettings,
     puzzle,
     isWon,
     updatePuzzle,
-    resetPuzzle,
+    clearPuzzle,
     generateNewPuzzle,
   };
 };

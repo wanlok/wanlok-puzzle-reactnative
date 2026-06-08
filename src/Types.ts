@@ -8,3 +8,9 @@ export type Position = {
   row: number;
   column: number;
 };
+
+export type PuzzleSettings = {
+  dimension: number;
+  seed: number;
+  numberOfCheckpoints: number;
+};
