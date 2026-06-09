@@ -4,6 +4,7 @@ import { PuzzleSettings } from "../Types";
 import { Container } from "./Container";
 import { Divider } from "./Divider";
 import { Row } from "./Row";
+import { palette } from "../theme/palette";
 
 interface TopContainerProps {
   puzzleSettings: PuzzleSettings;
@@ -35,7 +36,11 @@ export const TopContainer = ({
         left={<Text>Dimension</Text>}
         right={
           <View
-            style={{ borderWidth: 1, borderColor: "black", paddingLeft: 8 }}
+            style={{
+              borderWidth: 1,
+              borderColor: palette.divider,
+              backgroundColor: palette.common.white,
+            }}
           >
             <Picker
               selectedValue={puzzleSettings.dimension}
@@ -58,7 +63,11 @@ export const TopContainer = ({
         left={<Text>Checkpoints</Text>}
         right={
           <View
-            style={{ borderWidth: 1, borderColor: "black", paddingLeft: 8 }}
+            style={{
+              borderWidth: 1,
+              borderColor: palette.divider,
+              backgroundColor: palette.common.white,
+            }}
           >
             <Picker
               selectedValue={puzzleSettings.numberOfCheckpoints}
@@ -87,7 +96,7 @@ export const TopContainer = ({
           width: "100%",
         }}
       >
-        <Text>Puzzle {puzzleSettings.seed}</Text>
+        <Text>{puzzleSettings.seed}</Text>
         <Text>{formattedTime}</Text>
       </View>
     </Container>

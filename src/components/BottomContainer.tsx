@@ -1,5 +1,6 @@
-import { Button, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { Container } from "./Container";
+import { WButton } from "./WButton";
 
 interface BottomContainerProps {
   onClearButtonPress: () => void;
@@ -22,8 +23,8 @@ export const BottomContainer = ({
         justifyContent: "center",
       }}
     >
-      <Button title="Clear" onPress={onClearButtonPress} />
-      <Button title="Restart" onPress={onRestartButtonPress} />
+      <WButton title="Clear" onPress={onClearButtonPress} />
+      <WButton title="Restart" onPress={onRestartButtonPress} />
     </Container>
   );
 };

@@ -5,19 +5,22 @@ import { usePuzzle } from "../hooks/usePuzzle";
 import { useTimer } from "../hooks/useTimer";
 import { GameModal } from "../components/GameModal";
 import { TopContainer } from "../components/TopContainer";
+import { palette } from "../theme/palette";
 
-const MARGIN = 40;
+const MARGIN = 24;
+
+const generateSeed = () => Math.floor(Math.random() * 2 ** 32);
+
+const initialPuzzleSettings = {
+  dimension: 5,
+  seed: generateSeed(),
+  numberOfCheckpoints: 10,
+};
 
 export const Main = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - MARGIN * 2;
-
-  const initialPuzzleSettings = {
-    dimension: 5,
-    seed: 1,
-    numberOfCheckpoints: 10,
-  };
 
   const {
     puzzleSettings,
@@ -34,14 +37,9 @@ export const Main = () => {
   const { elapsedSeconds } = useTimer(puzzle, isWon);
 
   const showNextPuzzle = () => {
-    const seed = puzzleSettings.seed + 1;
     generateNewPuzzle({
       ...puzzleSettings,
-      seed,
-      numberOfCheckpoints:
-        seed % 11 === 0
-          ? puzzleSettings.numberOfCheckpoints - 1
-          : puzzleSettings.numberOfCheckpoints,
+      seed: generateSeed(),
     });
   };
 
@@ -53,6 +51,7 @@ export const Main = () => {
           flexDirection: isLandscape ? "row" : "column",
           alignItems: "center",
           justifyContent: "center",
+          backgroundColor: palette.background.default,
         }}
       >
         <TopContainer
