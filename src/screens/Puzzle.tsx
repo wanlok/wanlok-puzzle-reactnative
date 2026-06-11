@@ -1,23 +1,18 @@
-import { View, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BoardCanvas } from "../components/BoardCanvas";
 import { BottomContainer } from "../components/BottomContainer";
-import { usePuzzle } from "../hooks/usePuzzle";
 import { useTimer } from "../hooks/useTimer";
 import { GameModal } from "../components/GameModal";
 import { TopContainer } from "../components/TopContainer";
 import { palette } from "../theme/palette";
+import { usePuzzleContext } from "../context/PuzzleContext";
 
 const MARGIN = 24;
 
 const generateSeed = () => Math.floor(Math.random() * 2 ** 32);
 
-const initialPuzzleSettings = {
-  dimension: 5,
-  seed: generateSeed(),
-  numberOfCheckpoints: 10,
-};
-
-export const Main = () => {
+export const Puzzle = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const boardWidth = Math.min(width, height) - MARGIN * 2;
@@ -29,9 +24,7 @@ export const Main = () => {
     updatePuzzle,
     clearPuzzle,
     generateNewPuzzle,
-    onDimensionPickerValueChange,
-    onNumberOfCheckpointsPickerValueChange,
-  } = usePuzzle(initialPuzzleSettings);
+  } = usePuzzleContext();
 
   const { elapsedSeconds } = useTimer(puzzle, isWon);
 
@@ -44,7 +37,7 @@ export const Main = () => {
 
   return (
     <>
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
           flexDirection: isLandscape ? "row" : "column",
@@ -53,14 +46,7 @@ export const Main = () => {
           backgroundColor: palette.background.default,
         }}
       >
-        <TopContainer
-          puzzleSettings={puzzleSettings}
-          elapsedSeconds={elapsedSeconds}
-          onDimensionPickerValueChange={onDimensionPickerValueChange}
-          onNumberOfCheckpointsPickerValueChange={
-            onNumberOfCheckpointsPickerValueChange
-          }
-        />
+        <TopContainer elapsedSeconds={elapsedSeconds} />
         <BoardCanvas
           cells={puzzle}
           isWon={isWon}
@@ -68,7 +54,7 @@ export const Main = () => {
           boardWidth={boardWidth}
         />
         <BottomContainer onClearButtonPress={clearPuzzle} />
-      </View>
+      </SafeAreaView>
       <GameModal
         visible={isWon}
         text={"You won"}

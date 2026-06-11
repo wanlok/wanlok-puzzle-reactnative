@@ -2,6 +2,7 @@
   "expo": {
     "name": "wanlok-puzzle-reactnative",
     "slug": "wanlok-puzzle-reactnative",
+    "scheme": "wanlokpuzzle",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./src/assets/icon.png",
@@ -21,6 +22,9 @@
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
