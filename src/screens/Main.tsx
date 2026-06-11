@@ -29,7 +29,6 @@ export const Main = () => {
     updatePuzzle,
     clearPuzzle,
     generateNewPuzzle,
-    restartPuzzle,
     onDimensionPickerValueChange,
     onNumberOfCheckpointsPickerValueChange,
   } = usePuzzle(initialPuzzleSettings);
@@ -68,10 +67,7 @@ export const Main = () => {
           updatePuzzle={updatePuzzle}
           boardWidth={boardWidth}
         />
-        <BottomContainer
-          onClearButtonPress={clearPuzzle}
-          onRestartButtonPress={restartPuzzle}
-        />
+        <BottomContainer onClearButtonPress={clearPuzzle} />
       </View>
       <GameModal
         visible={isWon}

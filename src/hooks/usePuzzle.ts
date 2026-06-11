@@ -181,14 +181,6 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     setIsWon(false);
   };
 
-  const restartPuzzle = () => {
-    generateNewPuzzle({
-      ...initialPuzzleSettings,
-      dimension: puzzleSettings.dimension,
-      numberOfCheckpoints: puzzleSettings.numberOfCheckpoints,
-    });
-  };
-
   const onDimensionPickerValueChange = (dimension: number) => {
     const maxNumberOfCheckpoints = Math.floor((dimension * dimension) / 2);
     const numberOfCheckpoints = Math.min(
@@ -209,7 +201,6 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     updatePuzzle,
     clearPuzzle,
     generateNewPuzzle,
-    restartPuzzle,
     onDimensionPickerValueChange,
     onNumberOfCheckpointsPickerValueChange,
   };

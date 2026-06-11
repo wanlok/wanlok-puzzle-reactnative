@@ -5,6 +5,7 @@ import { Container } from "./Container";
 import { Divider } from "./Divider";
 import { Row } from "./Row";
 import { palette } from "../theme/palette";
+import { typography } from "../theme/typography";
 
 interface TopContainerProps {
   puzzleSettings: PuzzleSettings;
@@ -33,7 +34,7 @@ export const TopContainer = ({
   return (
     <Container isLandscape={isLandscape} style={{ gap: 16 }}>
       <Row
-        left={<Text>Dimension</Text>}
+        left={<Text style={typography.body1}>Dimension</Text>}
         right={
           <View
             style={{
@@ -60,7 +61,7 @@ export const TopContainer = ({
         }
       />
       <Row
-        left={<Text>Checkpoints</Text>}
+        left={<Text style={typography.body1}>Checkpoints</Text>}
         right={
           <View
             style={{
@@ -91,13 +92,12 @@ export const TopContainer = ({
       <View
         style={{
           flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "center",
           width: "100%",
+          marginTop: 8,
         }}
       >
-        <Text>{puzzleSettings.seed}</Text>
-        <Text>{formattedTime}</Text>
+        <Text style={typography.h4}>{formattedTime}</Text>
       </View>
     </Container>
   );

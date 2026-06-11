@@ -1,17 +1,16 @@
 import { Line, Svg } from "react-native-svg";
 import { Cell, Position } from "../Types";
+import { palette } from "../theme/palette";
 
 interface BoardPathProps {
   cells: Cell[][];
   cellWidth: number;
   boardWidth: number;
+  cellGap: number;
+  boardBorderWidth: number;
 }
 
-export const BoardPath = ({
-  cells,
-  cellWidth,
-  boardWidth,
-}: BoardPathProps) => {
+export const BoardPath = ({ cells, cellWidth, boardWidth, cellGap, boardBorderWidth }: BoardPathProps) => {
   const path: Position[] = cells
     .flatMap((row, i) => row.map((cell, j) => ({ cell, row: i, column: j })))
     .filter(({ cell }) => cell.pathSequence !== null)
@@ -22,8 +21,8 @@ export const BoardPath = ({
     .map(({ row, column }) => ({ row, column }));
 
   const cellCenter = (pos: Position) => ({
-    x: pos.column * cellWidth + cellWidth / 2,
-    y: pos.row * cellWidth + cellWidth / 2,
+    x: boardBorderWidth + pos.column * (cellWidth + cellGap) + cellWidth / 2,
+    y: boardBorderWidth + pos.row * (cellWidth + cellGap) + cellWidth / 2,
   });
 
   return (
@@ -43,7 +42,7 @@ export const BoardPath = ({
             y1={from.y}
             x2={to.x}
             y2={to.y}
-            stroke="blue"
+            stroke={palette.divider}
             strokeWidth={cellWidth * 0.4}
             strokeLinecap="round"
           />

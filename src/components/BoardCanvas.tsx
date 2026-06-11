@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Board } from "./Board";
+import { Board, BOARD_BORDER_WIDTH, CELL_GAP } from "./Board";
 import { BoardPath } from "./BoardPath";
 import { Cell } from "../Types";
 import { useBoardCanvas } from "../hooks/useBoardCanvas";
@@ -29,7 +29,13 @@ export const BoardCanvas = ({
       <View pointerEvents="none">
         <Board cells={cells} cellWidth={cellWidth} />
       </View>
-      <BoardPath cells={cells} cellWidth={cellWidth} boardWidth={boardWidth} />
+      <BoardPath
+        cells={cells}
+        cellWidth={cellWidth}
+        boardWidth={boardWidth}
+        cellGap={CELL_GAP}
+        boardBorderWidth={BOARD_BORDER_WIDTH}
+      />
     </View>
   );
 };

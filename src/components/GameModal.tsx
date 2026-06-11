@@ -1,4 +1,7 @@
 import { Button, Modal, Text, View } from "react-native";
+import { palette } from "../theme/palette";
+import { WButton } from "./WButton";
+import { typography } from "../theme/typography";
 
 interface GameModalProps {
   visible: boolean;
@@ -24,12 +27,12 @@ export const GameModal = ({ visible, text, onButtonPress }: GameModalProps) => {
             marginHorizontal: 40,
             padding: 24,
             gap: 24,
-            borderColor: "#000000",
+            borderColor: palette.divider,
             borderWidth: 1,
           }}
         >
-          <Text>{text}</Text>
-          <Button title="Close" onPress={onButtonPress}></Button>
+          <Text style={typography.body1}>{text}</Text>
+          <WButton title="Close" onPress={onButtonPress} />
         </View>
       </View>
     </Modal>

@@ -1,6 +1,7 @@
 
 import { PanResponder } from "react-native";
 import { Cell, Position } from "../Types";
+import { BOARD_BORDER_WIDTH, CELL_GAP } from "../components/Board";
 
 const getPosition = (
   x: number,
@@ -9,8 +10,9 @@ const getPosition = (
   numberOfColumns: number,
   cellWidth: number,
 ): Position | null => {
-  const column = Math.floor(x / cellWidth);
-  const row = Math.floor(y / cellWidth);
+  const slotSize = cellWidth + CELL_GAP;
+  const column = Math.floor(x / slotSize);
+  const row = Math.floor(y / slotSize);
   if (
     row >= 0 &&
     row < numberOfRows &&
@@ -62,7 +64,9 @@ export const useBoardCanvas = ({
 }: UseBoardCanvasProps) => {
   const numberOfRows = cells.length;
   const numberOfColumns = cells[0]?.length ?? 1;
-  const cellWidth = boardWidth / Math.max(numberOfColumns, numberOfRows);
+  const dimension = Math.max(numberOfColumns, numberOfRows);
+  const innerWidth = boardWidth - 2 * BOARD_BORDER_WIDTH;
+  const cellWidth = (innerWidth - (dimension - 1) * CELL_GAP) / dimension;
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (e) => {

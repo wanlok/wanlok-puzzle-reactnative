@@ -4,13 +4,9 @@ import { WButton } from "./WButton";
 
 interface BottomContainerProps {
   onClearButtonPress: () => void;
-  onRestartButtonPress: () => void;
 }
 
-export const BottomContainer = ({
-  onClearButtonPress,
-  onRestartButtonPress,
-}: BottomContainerProps) => {
+export const BottomContainer = ({ onClearButtonPress }: BottomContainerProps) => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   return (
@@ -23,8 +19,7 @@ export const BottomContainer = ({
         justifyContent: "center",
       }}
     >
-      <WButton title="Clear" onPress={onClearButtonPress} />
-      <WButton title="Restart" onPress={onRestartButtonPress} />
+      <WButton title="Clear" onPress={onClearButtonPress} style={{ flex: 1 }} />
     </Container>
   );
 };
