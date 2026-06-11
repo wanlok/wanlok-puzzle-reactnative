@@ -1,8 +1,7 @@
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
 import { palette } from "../theme/palette";
-import { typography } from "../theme/typography";
 import { usePuzzleContext } from "../context/PuzzleContext";
 import { Row } from "../components/Row";
 
@@ -26,7 +25,7 @@ export const Settings = () => {
         contentContainerStyle={{ padding: 24, gap: 16 }}
       >
         <Row
-          left={<Text style={typography.body1}>Dimension</Text>}
+          left="Dimension"
           right={
             <View
               style={{
@@ -53,7 +52,7 @@ export const Settings = () => {
           }
         />
         <Row
-          left={<Text style={typography.body1}>Checkpoints</Text>}
+          left="Checkpoints"
           right={
             <View
               style={{

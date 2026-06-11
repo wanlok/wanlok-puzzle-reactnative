@@ -1,8 +1,10 @@
-import { View } from "react-native";
+import { ReactNode } from "react";
+import { Text, View } from "react-native";
+import { typography } from "../theme/typography";
 
 interface RowProps {
-  left: React.ReactNode;
-  right: React.ReactNode;
+  left: ReactNode | string;
+  right: ReactNode | string;
 }
 
 export const Row = ({ left, right }: RowProps) => {
@@ -15,8 +17,16 @@ export const Row = ({ left, right }: RowProps) => {
         width: "100%",
       }}
     >
-      {left}
-      {right}
+      {typeof left === "string" ? (
+        <Text style={typography.body1}>{left}</Text>
+      ) : (
+        left
+      )}
+      {typeof right === "string" ? (
+        <Text style={typography.body1}>{right}</Text>
+      ) : (
+        right
+      )}
     </View>
   );
 };

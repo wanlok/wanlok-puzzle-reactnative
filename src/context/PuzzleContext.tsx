@@ -1,11 +1,14 @@
 import { createContext, use, PropsWithChildren } from "react";
 import { usePuzzle } from "../hooks/usePuzzle";
 import { Cell, PuzzleSettings } from "../Types";
+import { generateSeed } from "../utils/generateSeed";
 
 interface PuzzleContextValue {
   puzzleSettings: PuzzleSettings;
   puzzle: Cell[][];
   isWon: boolean;
+  elapsedSeconds: number;
+  result: { moveCount: number; clearCount: number };
   updatePuzzle: (cells: Cell[][]) => void;
   clearPuzzle: () => void;
   generateNewPuzzle: (settings: PuzzleSettings) => void;
@@ -15,8 +18,6 @@ interface PuzzleContextValue {
 
 const PuzzleContext = createContext<PuzzleContextValue | null>(null);
 
-const generateSeed = () => Math.floor(Math.random() * 2 ** 32);
-
 const initialPuzzleSettings: PuzzleSettings = {
   dimension: 5,
   seed: generateSeed(),
@@ -25,12 +26,7 @@ const initialPuzzleSettings: PuzzleSettings = {
 
 export const PuzzleProvider = ({ children }: PropsWithChildren) => {
   const puzzleState = usePuzzle(initialPuzzleSettings);
-
-  return (
-    <PuzzleContext value={puzzleState}>
-      {children}
-    </PuzzleContext>
-  );
+  return <PuzzleContext value={puzzleState}>{children}</PuzzleContext>;
 };
 
 export const usePuzzleContext = () => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Cell, PuzzleSettings } from "../Types";
 
 const printPathSequence = (cells: Cell[][]) => {
@@ -161,9 +161,43 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     generatePuzzle(puzzleSettings),
   );
   const [isWon, setIsWon] = useState<boolean>(false);
+  const resultRef = useRef({ moveCount: 0, clearCount: 0 });
+
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const startTimeRef = useRef<number | null>(null);
+
+  const hasStarted = puzzle.flat().some((cell) => cell.pathSequence !== null);
+  const isRunning = hasStarted && !isWon;
+
+  useEffect(() => {
+    if (!hasStarted) {
+      startTimeRef.current = null;
+      setElapsedSeconds(0);
+    }
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!isRunning) {
+      return;
+    }
+
+    const now = Date.now();
+    startTimeRef.current = now;
+
+    const interval = setInterval(() => {
+      setElapsedSeconds(
+        Math.floor((Date.now() - (startTimeRef.current as number)) / 1000),
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isRunning]);
 
   const updatePuzzle = (newCells: Cell[][]) => {
     printPathSequence(newCells);
+    resultRef.current.moveCount += 1;
     setPuzzle(newCells);
     setIsWon(checkWin(newCells));
   };
@@ -172,12 +206,15 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     setPuzzle(
       puzzle.map((row) => row.map((cell) => ({ ...cell, pathSequence: null }))),
     );
+    resultRef.current.clearCount += 1;
+    resultRef.current.moveCount = 0;
     setIsWon(false);
   };
 
   const generateNewPuzzle = (newPuzzleSettings: PuzzleSettings) => {
     setPuzzleSettings(newPuzzleSettings);
     setPuzzle(generatePuzzle(newPuzzleSettings));
+    resultRef.current = { moveCount: 0, clearCount: 0 };
     setIsWon(false);
   };
 
@@ -187,10 +224,16 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
       puzzleSettings.numberOfCheckpoints,
       maxNumberOfCheckpoints,
     );
-    generateNewPuzzle({ ...initialPuzzleSettings, dimension, numberOfCheckpoints });
+    generateNewPuzzle({
+      ...initialPuzzleSettings,
+      dimension,
+      numberOfCheckpoints,
+    });
   };
 
-  const onNumberOfCheckpointsPickerValueChange = (numberOfCheckpoints: number) => {
+  const onNumberOfCheckpointsPickerValueChange = (
+    numberOfCheckpoints: number,
+  ) => {
     generateNewPuzzle({ ...puzzleSettings, numberOfCheckpoints });
   };
 
@@ -198,6 +241,8 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     puzzleSettings,
     puzzle,
     isWon,
+    elapsedSeconds,
+    result: resultRef.current,
     updatePuzzle,
     clearPuzzle,
     generateNewPuzzle,

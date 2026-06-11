@@ -1,17 +1,27 @@
-import { Button, Modal, Text, View } from "react-native";
+import { Modal, Text, View, useWindowDimensions } from "react-native";
 import { palette } from "../theme/palette";
 import { WButton } from "./WButton";
 import { typography } from "../theme/typography";
+import { usePuzzleContext } from "../context/PuzzleContext";
+import { Divider } from "./Divider";
+import { Row } from "./Row";
+import { generateSeed } from "../utils/generateSeed";
 
-interface GameModalProps {
-  visible: boolean;
-  text: string;
-  onButtonPress: () => void;
-}
+export const GameModal = () => {
+  const { isWon, elapsedSeconds, result, puzzleSettings, generateNewPuzzle } =
+    usePuzzleContext();
+  const minutes = Math.floor(elapsedSeconds / 60);
+  const seconds = elapsedSeconds % 60;
+  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
-export const GameModal = ({ visible, text, onButtonPress }: GameModalProps) => {
+  const onNextButtonPress = () => {
+    generateNewPuzzle({ ...puzzleSettings, seed: generateSeed() });
+  };
+
   return (
-    <Modal transparent visible={visible} animationType="slide">
+    <Modal transparent visible={isWon} animationType="slide">
       <View
         style={{
           flex: 1,
@@ -31,8 +41,37 @@ export const GameModal = ({ visible, text, onButtonPress }: GameModalProps) => {
             borderWidth: 1,
           }}
         >
-          <Text style={typography.body1}>{text}</Text>
-          <WButton title="Close" onPress={onButtonPress} />
+          <Text style={typography.h6}>Result</Text>
+          <Divider />
+          <View
+            style={{
+              flexDirection: isLandscape ? "row" : "column",
+              gap: isLandscape ? 48 : 24,
+            }}
+          >
+            <View style={[{ flex: isLandscape ? 1 : undefined, gap: 24 }]}>
+              <Row
+                left="Dimension"
+                right={`${puzzleSettings.dimension} x ${puzzleSettings.dimension}`}
+              />
+              <Row
+                left="Checkpoints"
+                right={String(puzzleSettings.numberOfCheckpoints)}
+              />
+              <Row left="Time" right={formattedTime} />
+            </View>
+            <View style={[{ flex: isLandscape ? 1 : undefined, gap: 24 }]}>
+              <Row
+                left="Moves"
+                right={`${result.moveCount} / ${puzzleSettings.dimension * puzzleSettings.dimension}`}
+              />
+              <Row
+                left="Clear button pressed"
+                right={String(result.clearCount)}
+              />
+            </View>
+          </View>
+          <WButton title="Next" onPress={onNextButtonPress} />
         </View>
       </View>
     </Modal>
