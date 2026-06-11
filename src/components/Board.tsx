@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 import { Cell } from "../Types";
+import { palette } from "../theme/palette";
 
 interface BoardProps {
   cells: Cell[][];
@@ -17,15 +18,23 @@ export const Board = ({ cells, cellWidth }: BoardProps) => {
               style={{
                 width: cellWidth,
                 height: cellWidth,
-                borderWidth: 1,
-                borderColor: "#000000",
-                alignItems: "center",
-                justifyContent: "center",
+                padding: 4,
               }}
             >
-              {cell.checkpoint !== null && (
-                <Text style={{ fontSize: 20 }}>{cell.checkpoint}</Text>
-              )}
+              <View
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 8,
+                  backgroundColor: palette.common.white,
+                }}
+              >
+                {cell.checkpoint !== null && (
+                  <Text style={{ fontSize: 20 }}>{cell.checkpoint}</Text>
+                )}
+              </View>
             </View>
           ))}
         </View>
