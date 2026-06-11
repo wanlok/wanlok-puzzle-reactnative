@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BoardCanvas } from "../components/BoardCanvas";
@@ -15,7 +16,8 @@ const generateSeed = () => Math.floor(Math.random() * 2 ** 32);
 export const Puzzle = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
-  const boardWidth = Math.min(width, height) - MARGIN * 2;
+  const [containerHeight, setContainerHeight] = useState(height);
+  const boardWidth = Math.min(width, containerHeight) - MARGIN * 2;
 
   const {
     puzzleSettings,
@@ -45,6 +47,9 @@ export const Puzzle = () => {
           justifyContent: "center",
           backgroundColor: palette.background.default,
         }}
+        onLayout={(event) =>
+          setContainerHeight(event.nativeEvent.layout.height)
+        }
       >
         <TopContainer elapsedSeconds={elapsedSeconds} />
         <BoardCanvas
