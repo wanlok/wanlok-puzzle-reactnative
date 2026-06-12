@@ -2,7 +2,7 @@ import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
 import { palette } from "../theme/palette";
-import { usePuzzleContext } from "../context/PuzzleContext";
+import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
 import { Row } from "../components/Row";
 
 export const Settings = () => {
@@ -10,7 +10,7 @@ export const Settings = () => {
     puzzleSettings,
     onDimensionPickerValueChange,
     onNumberOfCheckpointsPickerValueChange,
-  } = usePuzzleContext();
+  } = usePuzzleSettingsContext();
 
   const maxNumberOfCheckpoints = Math.floor(
     (puzzleSettings.dimension * puzzleSettings.dimension) / 2,

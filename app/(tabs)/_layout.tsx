@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { palette } from "../../src/theme/palette";
-import { PuzzleProvider } from "../../src/context/PuzzleContext";
+import { PuzzleProvider } from "../../src/context/PuzzleProvider";
 
 const TabLayout = () => {
   return (

@@ -2,14 +2,15 @@ import { Modal, Text, View, useWindowDimensions } from "react-native";
 import { palette } from "../theme/palette";
 import { WButton } from "./WButton";
 import { typography } from "../theme/typography";
-import { usePuzzleContext } from "../context/PuzzleContext";
+import { usePuzzleStateContext } from "../context/PuzzleStateContext";
+import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
 import { Divider } from "./Divider";
 import { Row } from "./Row";
 import { generateSeed } from "../utils/generateSeed";
 
 export const GameModal = () => {
-  const { isWon, elapsedSeconds, result, puzzleSettings, generateNewPuzzle } =
-    usePuzzleContext();
+  const { isWon, elapsedSeconds, result } = usePuzzleStateContext();
+  const { puzzleSettings, generateNewPuzzle } = usePuzzleSettingsContext();
   const minutes = Math.floor(elapsedSeconds / 60);
   const seconds = elapsedSeconds % 60;
   const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;

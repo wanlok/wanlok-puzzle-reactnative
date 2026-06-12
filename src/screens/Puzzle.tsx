@@ -6,7 +6,7 @@ import { BottomContainer } from "../components/BottomContainer";
 import { GameModal } from "../components/GameModal";
 import { TopContainer } from "../components/TopContainer";
 import { palette } from "../theme/palette";
-import { usePuzzleContext } from "../context/PuzzleContext";
+import { usePuzzleStateContext } from "../context/PuzzleStateContext";
 
 const MARGIN = 24;
 
@@ -16,7 +16,7 @@ export const Puzzle = () => {
   const [containerHeight, setContainerHeight] = useState(height);
   const boardWidth = Math.min(width, containerHeight) - MARGIN * 2;
 
-  const { puzzle, isWon, elapsedSeconds, updatePuzzle, clearPuzzle } = usePuzzleContext();
+  const { puzzle, isWon, elapsedSeconds, updatePuzzle, clearPuzzle } = usePuzzleStateContext();
 
   return (
     <>
