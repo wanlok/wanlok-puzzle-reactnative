@@ -82,11 +82,13 @@ export const useBoardCanvas = ({
         return false;
       }
       const currentPath = getPath(cells);
+      if (currentPath.length <= 1) {
+        return true;
+      }
       const lastPosition = currentPath[currentPath.length - 1];
       return (
-        !lastPosition ||
-        (lastPosition.row === position.row &&
-          lastPosition.column === position.column)
+        lastPosition.row === position.row &&
+        lastPosition.column === position.column
       );
     },
     onMoveShouldSetPanResponder: () => false,
@@ -99,8 +101,18 @@ export const useBoardCanvas = ({
         numberOfColumns,
         cellWidth,
       );
-      if (position && getPath(cells).length === 0) {
-        updatePuzzle(getUpdatedCells(cells, position, 0));
+      if (!position) {
+        return;
+      }
+      const currentPath = getPath(cells);
+      if (currentPath.length === 1) {
+        const startPosition = currentPath[0];
+        if (
+          startPosition.row !== position.row ||
+          startPosition.column !== position.column
+        ) {
+          updatePuzzle(getUpdatedCells(cells, startPosition, null));
+        }
       }
     },
     onPanResponderMove: (e) => {

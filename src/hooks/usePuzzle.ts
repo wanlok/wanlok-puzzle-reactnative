@@ -145,6 +145,11 @@ const checkWin = (cells: Cell[][]): boolean => {
     }
   }
 
+  const firstCheckpoint = checkpoints[0];
+  if ((firstCheckpoint.pathSequence as number) !== 0) {
+    return false;
+  }
+
   const lastCheckpoint = checkpoints[checkpoints.length - 1];
   if ((lastCheckpoint.pathSequence as number) !== allCells.length - 1) {
     return false;
