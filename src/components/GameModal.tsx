@@ -7,13 +7,11 @@ import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
 import { Divider } from "./Divider";
 import { Row } from "./Row";
 import { generateSeed } from "../utils/generateSeed";
+import { formatTime } from "../utils/formatTime";
 
 export const GameModal = () => {
   const { isWon, elapsedSeconds, result } = usePuzzleStateContext();
   const { puzzleSettings, generateNewPuzzle } = usePuzzleSettingsContext();
-  const minutes = Math.floor(elapsedSeconds / 60);
-  const seconds = elapsedSeconds % 60;
-  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
 
@@ -59,7 +57,7 @@ export const GameModal = () => {
                 left="Checkpoints"
                 right={String(puzzleSettings.numberOfCheckpoints)}
               />
-              <Row left="Time" right={formattedTime} />
+              <Row left="Time" right={formatTime(elapsedSeconds)} />
             </View>
             <View style={[{ flex: isLandscape ? 1 : undefined, gap: 24 }]}>
               <Row

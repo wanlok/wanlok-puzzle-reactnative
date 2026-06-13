@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Cell, PuzzleSettings } from "../Types";
+import { saveGameRecord } from "../utils/gameStorage";
 
 const printPathSequence = (cells: Cell[][]) => {
   for (let i = 0; i < cells.length; i++) {
@@ -204,7 +205,17 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     printPathSequence(newCells);
     resultRef.current.moveCount += 1;
     setPuzzle(newCells);
-    setIsWon(checkWin(newCells));
+    if (checkWin(newCells)) {
+      setIsWon(true);
+      saveGameRecord({
+        timestamp: Date.now(),
+        dimension: puzzleSettings.dimension,
+        numberOfCheckpoints: puzzleSettings.numberOfCheckpoints,
+        elapsedSeconds,
+        moveCount: resultRef.current.moveCount,
+        clearCount: resultRef.current.clearCount,
+      });
+    }
   };
 
   const clearPuzzle = () => {

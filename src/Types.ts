@@ -14,3 +14,12 @@ export type PuzzleSettings = {
   seed: number;
   numberOfCheckpoints: number;
 };
+
+export type GameRecord = {
+  timestamp: number;
+  dimension: number;
+  numberOfCheckpoints: number;
+  elapsedSeconds: number;
+  moveCount: number;
+  clearCount: number;
+};
