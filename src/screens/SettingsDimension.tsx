@@ -10,7 +10,7 @@ export const SettingsDimension = () => {
 
   const sections: WSectionListSection[] = [
     {
-      data: Array.from({ length: 5 }, (_, i) => {
+      data: Array.from({ length: 6 }, (_, i) => {
         const dimension = i + 2;
         return {
           left: `${dimension} x ${dimension}`,

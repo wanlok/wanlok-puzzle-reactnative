@@ -79,7 +79,8 @@ export const WSectionList = ({ sections }: WSectionListProps) => {
         <Pressable
           onPress={item.onPress}
           style={({ pressed }) => ({
-            padding: 24,
+            paddingVertical: 16,
+            paddingHorizontal: 24,
             backgroundColor: pressed
               ? palette.background.default
               : palette.common.white,
