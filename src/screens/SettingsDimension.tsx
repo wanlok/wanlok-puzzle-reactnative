@@ -11,7 +11,7 @@ export const SettingsDimension = () => {
   const items: WListItem[] = Array.from({ length: 5 }, (_, i) => {
     const dimension = i + 2;
     return {
-      label: `${dimension} x ${dimension}`,
+      left: `${dimension} x ${dimension}`,
       right:
         dimension === puzzleSettings.dimension ? (
           <Ionicons name="checkmark" size={20} color={palette.text.primary} />

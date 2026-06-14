@@ -17,7 +17,7 @@ export const SettingsCheckpoints = () => {
     (_, i) => {
       const numberOfCheckpoints = i + 2;
       return {
-        label: `${numberOfCheckpoints}`,
+        left: `${numberOfCheckpoints}`,
         right:
           numberOfCheckpoints === puzzleSettings.numberOfCheckpoints ? (
             <Ionicons name="checkmark" size={20} color={palette.text.primary} />

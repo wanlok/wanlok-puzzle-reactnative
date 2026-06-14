@@ -11,7 +11,7 @@ export const Settings = () => {
 
   const items: WListItem[] = [
     {
-      label: "Dimension",
+      left: "Dimension",
       right: (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
           <Text style={[typography.body1, { color: palette.text.disabled }]}>
@@ -27,7 +27,7 @@ export const Settings = () => {
       onPress: () => router.push("/settings/dimension"),
     },
     {
-      label: "Checkpoints",
+      left: "Checkpoints",
       right: (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
           <Text style={[typography.body1, { color: palette.text.disabled }]}>
