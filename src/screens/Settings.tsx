@@ -1,33 +1,34 @@
 import { router } from "expo-router";
 import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
 import { RowValue } from "../components/RowValue";
-import { WList, WListItem } from "../components/WList";
-import { Divider } from "../components/Divider";
+import { WSectionList, WSectionListSection } from "../components/WSectionList";
 
 export const Settings = () => {
   const { puzzleSettings } = usePuzzleSettingsContext();
 
-  const items: WListItem[] = [
+  const sections: WSectionListSection[] = [
     {
-      left: "Dimension",
-      right: (
-        <RowValue
-          value={`${puzzleSettings.dimension} x ${puzzleSettings.dimension}`}
-        />
-      ),
-      onPress: () => router.push("/settings/dimension"),
-    },
-    {
-      left: "Checkpoints",
-      right: <RowValue value={String(puzzleSettings.numberOfCheckpoints)} />,
-      onPress: () => router.push("/settings/checkpoints"),
+      title: "Puzzle",
+      data: [
+        {
+          left: "Dimension",
+          right: (
+            <RowValue
+              value={`${puzzleSettings.dimension} x ${puzzleSettings.dimension}`}
+            />
+          ),
+          onPress: () => router.push("/settings/dimension"),
+        },
+        {
+          left: "Checkpoints",
+          right: (
+            <RowValue value={String(puzzleSettings.numberOfCheckpoints)} />
+          ),
+          onPress: () => router.push("/settings/checkpoints"),
+        },
+      ],
     },
   ];
 
-  return (
-    <>
-      <Divider />
-      <WList items={items} />
-    </>
-  );
+  return <WSectionList sections={sections} />;
 };
