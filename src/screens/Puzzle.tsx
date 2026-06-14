@@ -14,11 +14,11 @@ export const Puzzle = () => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const [containerHeight, setContainerHeight] = useState(height);
-  const boardWidth = Math.min(width, containerHeight) - MARGIN * 2;
   const insets = useSafeAreaInsets();
-  const containerWidth = isLandscape
-    ? (width - insets.left - insets.right - boardWidth) / 2
-    : undefined;
+  const safeWidth = width - insets.left - insets.right;
+  const safeHeight = containerHeight - insets.top - insets.bottom;
+  const boardWidth = Math.min(safeWidth, safeHeight) - MARGIN * 2;
+  const containerWidth = isLandscape ? (safeWidth - boardWidth) / 2 : undefined;
 
   const {
     puzzleNumber,
