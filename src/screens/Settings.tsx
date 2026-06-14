@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
 import { RowValue } from "../components/RowValue";
 import { WList, WListItem } from "../components/WList";
+import { Divider } from "../components/Divider";
 
 export const Settings = () => {
   const { puzzleSettings } = usePuzzleSettingsContext();
@@ -23,5 +24,10 @@ export const Settings = () => {
     },
   ];
 
-  return <WList items={items} />;
+  return (
+    <>
+      <Divider />
+      <WList items={items} />
+    </>
+  );
 };

@@ -19,7 +19,6 @@ export const WList = ({ items }: WListProps) => {
     <FlatList
       data={items}
       keyExtractor={(item) => item.left}
-      ListHeaderComponent={Divider}
       ItemSeparatorComponent={() => (
         <View
           style={{
@@ -30,7 +29,6 @@ export const WList = ({ items }: WListProps) => {
           <Divider />
         </View>
       )}
-      ListFooterComponent={Divider}
       style={{ backgroundColor: palette.background.default }}
       renderItem={({ item }) => (
         <Pressable

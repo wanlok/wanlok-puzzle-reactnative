@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
 import { WList, WListItem } from "../components/WList";
 import { palette } from "../theme/palette";
+import { Divider } from "../components/Divider";
 
 export const SettingsDimension = () => {
   const { puzzleSettings, onDimensionPickerValueChange } =
@@ -23,5 +24,10 @@ export const SettingsDimension = () => {
     };
   });
 
-  return <WList items={items} />;
+  return (
+    <>
+      <Divider />
+      <WList items={items} />
+    </>
+  );
 };
