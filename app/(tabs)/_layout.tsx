@@ -2,6 +2,7 @@ import { Platform, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { palette } from "../../src/theme/palette";
 import { PuzzleProvider } from "../../src/context/PuzzleProvider";
 import { isLiquidGlass } from "../../src/utils/isLiquidGlass";
@@ -12,6 +13,8 @@ const { Icon, Label } = Trigger;
 const TAB_BAR_HEIGHT = 49;
 
 const TabLayout = () => {
+  const insets = useSafeAreaInsets();
+
   if (isLiquidGlass) {
     return (
       <PuzzleProvider>
@@ -37,7 +40,8 @@ const TabLayout = () => {
           tabBarActiveTintColor: palette.text.primary,
           tabBarInactiveTintColor: palette.text.disabled,
           tabBarStyle: {
-            height: TAB_BAR_HEIGHT,
+            height: TAB_BAR_HEIGHT + insets.bottom,
+            paddingBottom: insets.bottom,
             elevation: 0,
             shadowOpacity: 0,
             borderTopWidth: 1,
