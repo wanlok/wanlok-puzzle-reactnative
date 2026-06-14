@@ -1,10 +1,34 @@
-import { Tabs } from "expo-router";
+import { Platform, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+import { Tabs } from "expo-router";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { palette } from "../../src/theme/palette";
 import { PuzzleProvider } from "../../src/context/PuzzleProvider";
 
+const isIOS26Plus =
+  Platform.OS === "ios" && parseInt(Platform.Version as string, 10) >= 26;
+
+const { Trigger } = NativeTabs;
+const { Icon, Label } = Trigger;
+
 const TabLayout = () => {
+  if (isIOS26Plus) {
+    return (
+      <PuzzleProvider>
+        <NativeTabs tintColor={palette.text.primary}>
+          <Trigger name="index">
+            <Icon sf="square.grid.2x2" />
+            <Label>Puzzle</Label>
+          </Trigger>
+          <Trigger name="settings">
+            <Icon sf="gearshape" />
+            <Label>Settings</Label>
+          </Trigger>
+        </NativeTabs>
+      </PuzzleProvider>
+    );
+  }
+
   return (
     <PuzzleProvider>
       <Tabs

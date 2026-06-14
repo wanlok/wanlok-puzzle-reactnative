@@ -30,6 +30,8 @@ export const WList = ({ items }: WListProps) => {
         </View>
       )}
       style={{ backgroundColor: palette.background.default }}
+      contentContainerStyle={{ paddingBottom: 24 }}
+      contentInsetAdjustmentBehavior="automatic"
       renderItem={({ item }) => (
         <Pressable
           onPress={item.onPress}
