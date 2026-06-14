@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { FlatList, Pressable, View } from "react-native";
+import { isLiquidGlass } from "../utils/isLiquidGlass";
 import { Divider } from "./Divider";
 import { Row } from "./Row";
 import { palette } from "../theme/palette";
@@ -30,7 +31,7 @@ export const WList = ({ items }: WListProps) => {
         </View>
       )}
       style={{ backgroundColor: palette.background.default }}
-      contentContainerStyle={{ paddingBottom: 24 }}
+      contentContainerStyle={isLiquidGlass ? { paddingBottom: 24 } : undefined}
       contentInsetAdjustmentBehavior="automatic"
       renderItem={({ item }) => (
         <Pressable
