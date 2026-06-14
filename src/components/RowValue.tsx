@@ -8,10 +8,10 @@ interface RowValueProps {
 }
 
 export const RowValue = ({ value }: RowValueProps) => (
-  <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+  <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
     <Text style={[typography.body1, { color: palette.text.primary }]}>
       {value}
     </Text>
-    <Ionicons name="chevron-forward" size={16} color={palette.text.disabled} />
+    <Ionicons name="chevron-forward" size={24} color={palette.divider} />
   </View>
 );
