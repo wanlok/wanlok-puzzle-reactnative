@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Platform, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
@@ -40,9 +40,12 @@ const TabLayout = () => {
             borderTopWidth: 1,
             borderColor: palette.divider,
           },
-          tabBarButton: ({ ref, ...props }) => (
-            <Pressable {...props} android_ripple={null} />
-          ),
+          tabBarButton:
+            Platform.OS === "android"
+              ? ({ ref, ...props }) => (
+                  <Pressable {...props} android_ripple={null} />
+                )
+              : undefined,
         }}
       >
         <Tabs.Screen
