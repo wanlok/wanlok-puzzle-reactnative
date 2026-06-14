@@ -9,6 +9,8 @@ import { isLiquidGlass } from "../../src/utils/isLiquidGlass";
 const { Trigger } = NativeTabs;
 const { Icon, Label } = Trigger;
 
+const TAB_BAR_HEIGHT = 49;
+
 const TabLayout = () => {
   if (isLiquidGlass) {
     return (
@@ -35,6 +37,7 @@ const TabLayout = () => {
           tabBarActiveTintColor: palette.text.primary,
           tabBarInactiveTintColor: palette.text.disabled,
           tabBarStyle: {
+            height: TAB_BAR_HEIGHT,
             elevation: 0,
             shadowOpacity: 0,
             borderTopWidth: 1,
