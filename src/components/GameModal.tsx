@@ -1,4 +1,5 @@
 import { Modal, Text, View, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { palette } from "../theme/palette";
 import { WButton } from "./WButton";
 import { typography } from "../theme/typography";
@@ -15,6 +16,7 @@ export const GameModal = () => {
   const { puzzleSettings, generateNewPuzzle } = usePuzzleSettingsContext();
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
+  const insets = useSafeAreaInsets();
 
   const onNextButtonPress = () => {
     generateNewPuzzle({ ...puzzleSettings, seed: generateSeed() });
@@ -26,6 +28,8 @@ export const GameModal = () => {
         style={{
           flex: 1,
           // backgroundColor: "rgba(0, 0, 0, 0.5)",
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
           alignItems: "center",
           justifyContent: "center",
         }}
