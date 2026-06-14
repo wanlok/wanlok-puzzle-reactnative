@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { isLiquidGlass } from "../utils/isLiquidGlass";
 import { BoardCanvas } from "../components/BoardCanvas";
 import { BottomContainer } from "../components/BottomContainer";
 import { GameModal } from "../components/GameModal";
@@ -16,7 +17,8 @@ export const Puzzle = () => {
   const [containerHeight, setContainerHeight] = useState(height);
   const insets = useSafeAreaInsets();
   const safeWidth = width - insets.left - insets.right;
-  const safeHeight = containerHeight - insets.top - insets.bottom;
+  const safeHeight =
+    containerHeight - insets.top - (isLiquidGlass ? insets.bottom : 0);
   const boardWidth = Math.min(safeWidth, safeHeight) - MARGIN * 2;
   const containerWidth = isLandscape ? (safeWidth - boardWidth) / 2 : undefined;
 
@@ -35,7 +37,7 @@ export const Puzzle = () => {
         style={{
           flex: 1,
           paddingTop: insets.top,
-          paddingBottom: insets.bottom,
+          paddingBottom: isLiquidGlass ? insets.bottom : 0,
           paddingLeft: insets.left,
           paddingRight: insets.right,
           flexDirection: isLandscape ? "row" : "column",
