@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useWindowDimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BoardCanvas } from "../components/BoardCanvas";
 import { BottomContainer } from "../components/BottomContainer";
 import { GameModal } from "../components/GameModal";
@@ -15,6 +15,10 @@ export const Puzzle = () => {
   const isLandscape = width > height;
   const [containerHeight, setContainerHeight] = useState(height);
   const boardWidth = Math.min(width, containerHeight) - MARGIN * 2;
+  const insets = useSafeAreaInsets();
+  const containerWidth = isLandscape
+    ? (width - insets.left - insets.right - boardWidth) / 2
+    : undefined;
 
   const {
     puzzleNumber,
@@ -27,9 +31,13 @@ export const Puzzle = () => {
 
   return (
     <>
-      <SafeAreaView
+      <View
         style={{
           flex: 1,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
           flexDirection: isLandscape ? "row" : "column",
           alignItems: "center",
           justifyContent: "center",
@@ -42,6 +50,7 @@ export const Puzzle = () => {
         <TopContainer
           elapsedSeconds={elapsedSeconds}
           puzzleNumber={puzzleNumber}
+          width={containerWidth}
         />
         <BoardCanvas
           cells={puzzle}
@@ -49,8 +58,11 @@ export const Puzzle = () => {
           updatePuzzle={updatePuzzle}
           boardWidth={boardWidth}
         />
-        <BottomContainer onClearButtonPress={clearPuzzle} />
-      </SafeAreaView>
+        <BottomContainer
+          onClearButtonPress={clearPuzzle}
+          width={containerWidth}
+        />
+      </View>
       <GameModal />
     </>
   );
