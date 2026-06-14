@@ -13,6 +13,7 @@ const initialPuzzleSettings: PuzzleSettings = {
 
 export const PuzzleProvider = ({ children }: PropsWithChildren) => {
   const {
+    puzzleNumber,
     puzzle,
     isWon,
     elapsedSeconds,
@@ -26,8 +27,25 @@ export const PuzzleProvider = ({ children }: PropsWithChildren) => {
   } = usePuzzle(initialPuzzleSettings);
 
   return (
-    <PuzzleStateContext value={{ puzzle, isWon, elapsedSeconds, result, updatePuzzle, clearPuzzle }}>
-      <PuzzleSettingsContext value={{ puzzleSettings, generateNewPuzzle, onDimensionPickerValueChange, onNumberOfCheckpointsPickerValueChange }}>
+    <PuzzleStateContext
+      value={{
+        puzzleNumber,
+        puzzle,
+        isWon,
+        elapsedSeconds,
+        result,
+        updatePuzzle,
+        clearPuzzle,
+      }}
+    >
+      <PuzzleSettingsContext
+        value={{
+          puzzleSettings,
+          generateNewPuzzle,
+          onDimensionPickerValueChange,
+          onNumberOfCheckpointsPickerValueChange,
+        }}
+      >
         {children}
       </PuzzleSettingsContext>
     </PuzzleStateContext>

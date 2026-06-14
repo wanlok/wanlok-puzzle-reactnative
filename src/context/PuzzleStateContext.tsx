@@ -2,6 +2,7 @@ import { createContext, use } from "react";
 import { Cell } from "../Types";
 
 export interface PuzzleStateContextValue {
+  puzzleNumber: number;
   puzzle: Cell[][];
   isWon: boolean;
   elapsedSeconds: number;

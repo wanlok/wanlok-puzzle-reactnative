@@ -5,23 +5,20 @@ import { formatTime } from "../utils/formatTime";
 
 interface TopContainerProps {
   elapsedSeconds: number;
+  puzzleNumber: number;
 }
 
-export const TopContainer = ({ elapsedSeconds }: TopContainerProps) => {
+export const TopContainer = ({
+  elapsedSeconds,
+  puzzleNumber,
+}: TopContainerProps) => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
 
   return (
-    <Container isLandscape={isLandscape}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        <Text style={typography.h4}>{formatTime(elapsedSeconds)}</Text>
-      </View>
+    <Container isLandscape={isLandscape} style={{ gap: 16 }}>
+      <Text style={typography.h6}>Puzzle {puzzleNumber}</Text>
+      <Text style={typography.h4}>{formatTime(elapsedSeconds)}</Text>
     </Container>
   );
 };

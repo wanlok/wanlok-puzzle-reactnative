@@ -10,7 +10,8 @@ import { generateSeed } from "../utils/generateSeed";
 import { formatTime } from "../utils/formatTime";
 
 export const GameModal = () => {
-  const { isWon, elapsedSeconds, result } = usePuzzleStateContext();
+  const { puzzleNumber, isWon, elapsedSeconds, result } =
+    usePuzzleStateContext();
   const { puzzleSettings, generateNewPuzzle } = usePuzzleSettingsContext();
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
@@ -40,7 +41,7 @@ export const GameModal = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={typography.h6}>Result</Text>
+          <Text style={typography.h6}>Puzzle {puzzleNumber} Result</Text>
           <Divider />
           <View
             style={{

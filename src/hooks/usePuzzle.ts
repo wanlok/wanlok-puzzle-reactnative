@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Cell, PuzzleSettings } from "../Types";
-import { saveGameRecord } from "../utils/gameStorage";
+import { loadGameRecords, saveGameRecord } from "../utils/gameStorage";
 
 const printPathSequence = (cells: Cell[][]) => {
   for (let i = 0; i < cells.length; i++) {
@@ -160,6 +160,7 @@ const checkWin = (cells: Cell[][]): boolean => {
 };
 
 export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
+  const [puzzleNumber, setPuzzleNumber] = useState(1);
   const [puzzleSettings, setPuzzleSettings] = useState<PuzzleSettings>(
     initialPuzzleSettings,
   );
@@ -174,6 +175,12 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
 
   const hasStarted = puzzle.flat().some((cell) => cell.pathSequence !== null);
   const isRunning = hasStarted && !isWon;
+
+  useEffect(() => {
+    loadGameRecords().then((records) => {
+      setPuzzleNumber(records.length + 1);
+    });
+  }, []);
 
   useEffect(() => {
     if (!hasStarted) {
@@ -228,6 +235,9 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
   };
 
   const generateNewPuzzle = (newPuzzleSettings: PuzzleSettings) => {
+    if (isWon) {
+      setPuzzleNumber((previous) => previous + 1);
+    }
     setPuzzleSettings(newPuzzleSettings);
     setPuzzle(generatePuzzle(newPuzzleSettings));
     resultRef.current = { moveCount: 0, clearCount: 0 };
@@ -254,6 +264,7 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
   };
 
   return {
+    puzzleNumber,
     puzzleSettings,
     puzzle,
     isWon,

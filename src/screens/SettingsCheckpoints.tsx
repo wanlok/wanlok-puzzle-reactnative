@@ -20,7 +20,7 @@ export const SettingsCheckpoints = () => {
         left: `${numberOfCheckpoints}`,
         right:
           numberOfCheckpoints === puzzleSettings.numberOfCheckpoints ? (
-            <Ionicons name="checkmark" size={24} color={palette.divider} />
+            <Ionicons name="checkmark" size={24} color={palette.common.black} />
           ) : null,
         onPress: () => {
           onNumberOfCheckpointsPickerValueChange(numberOfCheckpoints);

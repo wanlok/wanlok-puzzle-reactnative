@@ -16,8 +16,14 @@ export const Puzzle = () => {
   const [containerHeight, setContainerHeight] = useState(height);
   const boardWidth = Math.min(width, containerHeight) - MARGIN * 2;
 
-  const { puzzle, isWon, elapsedSeconds, updatePuzzle, clearPuzzle } =
-    usePuzzleStateContext();
+  const {
+    puzzleNumber,
+    puzzle,
+    isWon,
+    elapsedSeconds,
+    updatePuzzle,
+    clearPuzzle,
+  } = usePuzzleStateContext();
 
   return (
     <>
@@ -33,7 +39,10 @@ export const Puzzle = () => {
           setContainerHeight(event.nativeEvent.layout.height)
         }
       >
-        <TopContainer elapsedSeconds={elapsedSeconds} />
+        <TopContainer
+          elapsedSeconds={elapsedSeconds}
+          puzzleNumber={puzzleNumber}
+        />
         <BoardCanvas
           cells={puzzle}
           isWon={isWon}

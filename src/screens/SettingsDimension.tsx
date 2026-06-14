@@ -14,7 +14,7 @@ export const SettingsDimension = () => {
       left: `${dimension} x ${dimension}`,
       right:
         dimension === puzzleSettings.dimension ? (
-          <Ionicons name="checkmark" size={24} color={palette.divider} />
+          <Ionicons name="checkmark" size={24} color={palette.common.black} />
         ) : null,
       onPress: () => {
         onDimensionPickerValueChange(dimension);
