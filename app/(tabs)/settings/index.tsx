@@ -1,4 +1,4 @@
-import { Settings } from "../../src/screens/Settings";
+import { Settings } from "../../../src/screens/Settings";
 
 const SettingsTab = () => {
   return <Settings />;

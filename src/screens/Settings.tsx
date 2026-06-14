@@ -1,87 +1,48 @@
-import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Picker } from "@react-native-picker/picker";
+import { Text, View } from "react-native";
+import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { palette } from "../theme/palette";
+import { typography } from "../theme/typography";
 import { usePuzzleSettingsContext } from "../context/PuzzleSettingsContext";
-import { Row } from "../components/Row";
+import { WList, WListItem } from "../components/WList";
 
 export const Settings = () => {
-  const {
-    puzzleSettings,
-    onDimensionPickerValueChange,
-    onNumberOfCheckpointsPickerValueChange,
-  } = usePuzzleSettingsContext();
+  const { puzzleSettings } = usePuzzleSettingsContext();
 
-  const maxNumberOfCheckpoints = Math.floor(
-    (puzzleSettings.dimension * puzzleSettings.dimension) / 2,
-  );
+  const items: WListItem[] = [
+    {
+      label: "Dimension",
+      right: (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text style={[typography.body1, { color: palette.text.disabled }]}>
+            {`${puzzleSettings.dimension} x ${puzzleSettings.dimension}`}
+          </Text>
+          <Ionicons
+            name="chevron-forward"
+            size={16}
+            color={palette.text.disabled}
+          />
+        </View>
+      ),
+      onPress: () => router.push("/settings/dimension"),
+    },
+    {
+      label: "Checkpoints",
+      right: (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text style={[typography.body1, { color: palette.text.disabled }]}>
+            {String(puzzleSettings.numberOfCheckpoints)}
+          </Text>
+          <Ionicons
+            name="chevron-forward"
+            size={16}
+            color={palette.text.disabled}
+          />
+        </View>
+      ),
+      onPress: () => router.push("/settings/checkpoints"),
+    },
+  ];
 
-  return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: palette.background.default }}
-    >
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 24, gap: 16 }}
-      >
-        <Row
-          left="Dimension"
-          right={
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: palette.divider,
-                backgroundColor: palette.common.white,
-              }}
-            >
-              <Picker
-                selectedValue={puzzleSettings.dimension}
-                onValueChange={onDimensionPickerValueChange}
-                style={{ width: 120 }}
-                mode="dialog"
-              >
-                {Array.from({ length: 5 }, (_, i) => i + 2).map((size) => (
-                  <Picker.Item
-                    key={size}
-                    label={`${size} x ${size}`}
-                    value={size}
-                  />
-                ))}
-              </Picker>
-            </View>
-          }
-        />
-        <Row
-          left="Checkpoints"
-          right={
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: palette.divider,
-                backgroundColor: palette.common.white,
-              }}
-            >
-              <Picker
-                selectedValue={puzzleSettings.numberOfCheckpoints}
-                onValueChange={onNumberOfCheckpointsPickerValueChange}
-                style={{ width: 120 }}
-                mode="dialog"
-              >
-                {Array.from(
-                  { length: maxNumberOfCheckpoints - 1 },
-                  (_, i) => i + 2,
-                ).map((number) => (
-                  <Picker.Item
-                    key={number}
-                    label={`${number}`}
-                    value={number}
-                  />
-                ))}
-              </Picker>
-            </View>
-          }
-        />
-      </ScrollView>
-    </SafeAreaView>
-  );
+  return <WList items={items} />;
 };
