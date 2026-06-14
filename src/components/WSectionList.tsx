@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { Pressable, SectionList, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { isLiquidGlass } from "../utils/isLiquidGlass";
 import { Divider } from "./Divider";
 import { Row } from "./Row";
 import { palette } from "../theme/palette";
@@ -68,7 +69,11 @@ export const WSectionList = ({ sections }: WSectionListProps) => {
         return <Divider />;
       }}
       style={{ backgroundColor: palette.background.default }}
-      contentContainerStyle={{ paddingLeft: insets.left, paddingRight: insets.right }}
+      contentContainerStyle={{
+        paddingBottom: isLiquidGlass ? 16 : 0,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+      }}
       contentInsetAdjustmentBehavior="automatic"
       renderItem={({ item }) => (
         <Pressable
