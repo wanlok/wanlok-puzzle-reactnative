@@ -18,6 +18,7 @@ export const Board = ({ cells, cellWidth }: BoardProps) => {
         gap: CELL_GAP,
         borderWidth: BOARD_BORDER_WIDTH,
         borderColor: palette.divider,
+        backgroundColor: palette.background.default,
       }}
     >
       {cells.map((row, i) => (

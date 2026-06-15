@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import { Pressable, SectionList, Text, View } from "react-native";
+import { Pressable, SectionList, Text, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { isLiquidGlass } from "../utils/isLiquidGlass";
 import { Divider } from "./Divider";
@@ -8,7 +8,7 @@ import { palette } from "../theme/palette";
 import { typography } from "../theme/typography";
 
 export interface WListItem {
-  left: string;
+  left: ReactNode | string;
   right?: ReactNode;
   onPress: () => void;
 }
@@ -20,9 +20,13 @@ export interface WSectionListSection {
 
 interface WSectionListProps {
   sections: WSectionListSection[];
+  itemPressableStyle?: ViewStyle;
 }
 
-export const WSectionList = ({ sections }: WSectionListProps) => {
+export const WSectionList = ({
+  sections,
+  itemPressableStyle,
+}: WSectionListProps) => {
   const [contentHeight, setContentHeight] = useState(0);
   const [listHeight, setListHeight] = useState(0);
   const isScrollable = contentHeight > listHeight;
@@ -31,7 +35,7 @@ export const WSectionList = ({ sections }: WSectionListProps) => {
   return (
     <SectionList
       sections={sections}
-      keyExtractor={(item) => item.left}
+      keyExtractor={(_, index) => String(index)}
       stickySectionHeadersEnabled
       onLayout={(event) => setListHeight(event.nativeEvent.layout.height)}
       onContentSizeChange={(_, height) => setContentHeight(height)}
@@ -84,6 +88,7 @@ export const WSectionList = ({ sections }: WSectionListProps) => {
             backgroundColor: pressed
               ? palette.background.default
               : palette.common.white,
+            ...itemPressableStyle,
           })}
         >
           <Row left={item.left} right={item.right ?? null} />

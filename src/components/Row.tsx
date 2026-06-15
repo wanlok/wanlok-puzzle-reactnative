@@ -15,6 +15,7 @@ export const Row = ({ left, right }: RowProps) => {
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
+        gap: 24,
       }}
     >
       {typeof left === "string" ? (

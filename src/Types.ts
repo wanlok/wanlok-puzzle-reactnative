@@ -16,9 +16,8 @@ export type PuzzleSettings = {
 };
 
 export type GameRecord = {
+  cells: Cell[][];
   timestamp: number;
-  dimension: number;
-  numberOfCheckpoints: number;
   elapsedSeconds: number;
   moveCount: number;
   clearCount: number;

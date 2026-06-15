@@ -1,70 +1,75 @@
 import { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Text, View } from "react-native";
 import { GameRecord } from "../Types";
 import { loadGameRecords } from "../utils/gameStorage";
 import { formatTime } from "../utils/formatTime";
-import { isLiquidGlass } from "../utils/isLiquidGlass";
-import { Divider } from "../components/Divider";
-import { Row } from "../components/Row";
-import { palette } from "../theme/palette";
+import { Board, BOARD_BORDER_WIDTH, CELL_GAP } from "../components/Board";
+import { BoardPath } from "../components/BoardPath";
+import { WSectionList, WSectionListSection } from "../components/WSectionList";
+import { typography } from "../theme/typography";
+
+const THUMBNAIL_WIDTH = 200;
+
+const getThumbnailCellWidth = (dimension: number) => {
+  const innerWidth = THUMBNAIL_WIDTH - 2 * BOARD_BORDER_WIDTH;
+  return (innerWidth - (dimension - 1) * CELL_GAP) / dimension;
+};
 
 export const Records = () => {
   const [records, setRecords] = useState<GameRecord[]>([]);
-  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     loadGameRecords().then(setRecords);
   }, []);
 
-  const reversedRecords = [...records].reverse();
+  const sections: WSectionListSection[] = [
+    {
+      data: [...records].reverse().map((record, index) => {
+        const dimension = record.cells.length;
+        const numberOfCheckpoints = record.cells
+          .flat()
+          .filter((cell) => cell.checkpoint !== null).length;
+        const cellWidth = getThumbnailCellWidth(dimension);
+        return {
+          left: (
+            <View style={{ width: THUMBNAIL_WIDTH, height: THUMBNAIL_WIDTH }}>
+              <Board cells={record.cells} cellWidth={cellWidth} />
+              <BoardPath
+                cells={record.cells}
+                cellWidth={cellWidth}
+                boardWidth={THUMBNAIL_WIDTH}
+                cellGap={CELL_GAP}
+                boardBorderWidth={BOARD_BORDER_WIDTH}
+              />
+            </View>
+          ),
+          right: (
+            <View style={{ flex: 1, gap: 8 }}>
+              <Text style={typography.body2}>
+                Puzzle {records.length - index}
+              </Text>
+              <Text style={typography.body2}>
+                {new Date(record.timestamp).toLocaleDateString()}
+              </Text>
+              <Text style={typography.body2}>
+                {formatTime(record.elapsedSeconds)}
+              </Text>
+              <Text style={typography.body2}>
+                {numberOfCheckpoints} checkpoints
+              </Text>
+              <Text style={typography.body2}>{record.moveCount} moves</Text>
+            </View>
+          ),
+          onPress: () => {},
+        };
+      }),
+    },
+  ];
 
   return (
-    <FlatList
-      data={reversedRecords}
-      keyExtractor={(_, i) => String(i)}
-      ListHeaderComponent={<Divider />}
-      ItemSeparatorComponent={() => (
-        <View
-          style={{
-            backgroundColor: palette.common.white,
-            paddingHorizontal: 24,
-          }}
-        >
-          <Divider />
-        </View>
-      )}
-      ListFooterComponent={records.length > 0 ? <Divider /> : undefined}
-      contentContainerStyle={{
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-        paddingBottom: isLiquidGlass ? 16 : 0,
-      }}
-      contentInsetAdjustmentBehavior="automatic"
-      style={{ backgroundColor: palette.background.default }}
-      renderItem={({ item, index }: { item: GameRecord; index: number }) => {
-        const puzzleNumber = records.length - index;
-        const date = new Date(item.timestamp).toLocaleDateString();
-        return (
-          <View
-            style={{
-              padding: 24,
-              backgroundColor: palette.common.white,
-              gap: 16,
-            }}
-          >
-            <Row left={`Puzzle ${puzzleNumber}`} right={date} />
-            <Row
-              left={`${item.dimension} x ${item.dimension}`}
-              right={formatTime(item.elapsedSeconds)}
-            />
-            <Row
-              left={`${item.numberOfCheckpoints} checkpoints`}
-              right={`${item.moveCount} moves`}
-            />
-          </View>
-        );
-      }}
+    <WSectionList
+      sections={sections}
+      itemPressableStyle={{ paddingVertical: 24 }}
     />
   );
 };

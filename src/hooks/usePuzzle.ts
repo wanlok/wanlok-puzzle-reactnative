@@ -215,9 +215,8 @@ export const usePuzzle = (initialPuzzleSettings: PuzzleSettings) => {
     if (checkWin(newCells)) {
       setIsWon(true);
       saveGameRecord({
+        cells: newCells,
         timestamp: Date.now(),
-        dimension: puzzleSettings.dimension,
-        numberOfCheckpoints: puzzleSettings.numberOfCheckpoints,
         elapsedSeconds,
         moveCount: resultRef.current.moveCount,
         clearCount: resultRef.current.clearCount,
