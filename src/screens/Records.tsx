@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "expo-router";
 import { Text, View } from "react-native";
 import { GameRecord } from "../Types";
 import { loadGameRecords } from "../utils/gameStorage";
@@ -18,9 +19,11 @@ const getThumbnailCellWidth = (dimension: number) => {
 export const Records = () => {
   const [records, setRecords] = useState<GameRecord[]>([]);
 
-  useEffect(() => {
-    loadGameRecords().then(setRecords);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadGameRecords().then(setRecords);
+    }, []),
+  );
 
   const sections: WSectionListSection[] = [
     {
@@ -57,7 +60,9 @@ export const Records = () => {
               <Text style={typography.body2}>
                 {numberOfCheckpoints} checkpoints
               </Text>
-              <Text style={typography.body2}>{record.moveCount} moves</Text>
+              <Text style={typography.body2}>
+                {record.moveCount} / {dimension * dimension} moves
+              </Text>
             </View>
           ),
           onPress: () => {},
