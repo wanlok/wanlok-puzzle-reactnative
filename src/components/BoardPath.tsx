@@ -7,10 +7,9 @@ interface BoardPathProps {
   cellWidth: number;
   boardWidth: number;
   cellGap: number;
-  boardBorderWidth: number;
 }
 
-export const BoardPath = ({ cells, cellWidth, boardWidth, cellGap, boardBorderWidth }: BoardPathProps) => {
+export const BoardPath = ({ cells, cellWidth, boardWidth, cellGap }: BoardPathProps) => {
   const path: Position[] = cells
     .flatMap((row, i) => row.map((cell, j) => ({ cell, row: i, column: j })))
     .filter(({ cell }) => cell.pathSequence !== null)
@@ -21,8 +20,8 @@ export const BoardPath = ({ cells, cellWidth, boardWidth, cellGap, boardBorderWi
     .map(({ row, column }) => ({ row, column }));
 
   const cellCenter = (pos: Position) => ({
-    x: boardBorderWidth + pos.column * (cellWidth + cellGap) + cellWidth / 2,
-    y: boardBorderWidth + pos.row * (cellWidth + cellGap) + cellWidth / 2,
+    x: pos.column * (cellWidth + cellGap) + cellWidth / 2,
+    y: pos.row * (cellWidth + cellGap) + cellWidth / 2,
   });
 
   return (

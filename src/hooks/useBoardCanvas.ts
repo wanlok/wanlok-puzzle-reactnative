@@ -1,7 +1,8 @@
 
 import { PanResponder } from "react-native";
 import { Cell, Position } from "../Types";
-import { BOARD_BORDER_WIDTH, CELL_GAP } from "../components/Board";
+import { BOARD_BORDER_WIDTH } from "../components/BoardCanvas";
+import { CELL_GAP } from "../components/Board";
 
 const getPosition = (
   x: number,

@@ -4,17 +4,18 @@ import { Text, View } from "react-native";
 import { GameRecord } from "../Types";
 import { loadGameRecords } from "../utils/gameStorage";
 import { formatTime } from "../utils/formatTime";
-import { Board, BOARD_BORDER_WIDTH, CELL_GAP } from "../components/Board";
+import { Board, CELL_GAP } from "../components/Board";
 import { BoardPath } from "../components/BoardPath";
 import { WSectionList, WSectionListSection } from "../components/WSectionList";
 import { typography } from "../theme/typography";
+import { BOARD_BORDER_WIDTH } from "../components/BoardCanvas";
+import { palette } from "../theme/palette";
 
-const THUMBNAIL_WIDTH = 200;
+const THUMBNAIL_WIDTH = 150;
+const THUMBNAIL_INNER_WIDTH = THUMBNAIL_WIDTH - 2 * BOARD_BORDER_WIDTH;
 
-const getThumbnailCellWidth = (dimension: number) => {
-  const innerWidth = THUMBNAIL_WIDTH - 2 * BOARD_BORDER_WIDTH;
-  return (innerWidth - (dimension - 1) * CELL_GAP) / dimension;
-};
+const getThumbnailCellWidth = (dimension: number) =>
+  (THUMBNAIL_INNER_WIDTH - (dimension - 1) * CELL_GAP) / dimension;
 
 export const Records = () => {
   const [records, setRecords] = useState<GameRecord[]>([]);
@@ -35,14 +36,24 @@ export const Records = () => {
         const cellWidth = getThumbnailCellWidth(dimension);
         return {
           left: (
-            <View style={{ width: THUMBNAIL_WIDTH, height: THUMBNAIL_WIDTH }}>
-              <Board cells={record.cells} cellWidth={cellWidth} />
+            <View
+              style={{
+                width: THUMBNAIL_WIDTH,
+                height: THUMBNAIL_WIDTH,
+                borderWidth: BOARD_BORDER_WIDTH,
+                borderColor: palette.divider,
+              }}
+            >
+              <Board
+                cells={record.cells}
+                cellWidth={cellWidth}
+                showCheckpoints={false}
+              />
               <BoardPath
                 cells={record.cells}
                 cellWidth={cellWidth}
-                boardWidth={THUMBNAIL_WIDTH}
+                boardWidth={THUMBNAIL_INNER_WIDTH}
                 cellGap={CELL_GAP}
-                boardBorderWidth={BOARD_BORDER_WIDTH}
               />
             </View>
           ),

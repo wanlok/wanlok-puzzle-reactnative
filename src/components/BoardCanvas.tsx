@@ -1,8 +1,11 @@
 import { View } from "react-native";
-import { Board, BOARD_BORDER_WIDTH, CELL_GAP } from "./Board";
+import { Board, CELL_GAP } from "./Board";
 import { BoardPath } from "./BoardPath";
 import { Cell } from "../Types";
 import { useBoardCanvas } from "../hooks/useBoardCanvas";
+import { palette } from "../theme/palette";
+
+export const BOARD_BORDER_WIDTH = 1;
 
 interface BoardCanvasProps {
   cells: Cell[][];
@@ -24,17 +27,26 @@ export const BoardCanvas = ({
     boardWidth,
   });
 
+  const innerBoardWidth = boardWidth - 2 * BOARD_BORDER_WIDTH;
+
   return (
-    <View style={{ width: boardWidth, height: boardWidth }} {...panHandlers}>
+    <View
+      style={{
+        width: boardWidth,
+        height: boardWidth,
+        borderWidth: BOARD_BORDER_WIDTH,
+        borderColor: palette.divider,
+      }}
+      {...panHandlers}
+    >
       <View pointerEvents="none">
         <Board cells={cells} cellWidth={cellWidth} />
       </View>
       <BoardPath
         cells={cells}
         cellWidth={cellWidth}
-        boardWidth={boardWidth}
+        boardWidth={innerBoardWidth}
         cellGap={CELL_GAP}
-        boardBorderWidth={BOARD_BORDER_WIDTH}
       />
     </View>
   );
