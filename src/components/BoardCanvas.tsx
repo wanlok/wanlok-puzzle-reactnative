@@ -36,6 +36,7 @@ export const BoardCanvas = ({
         height: boardWidth,
         borderWidth: BOARD_BORDER_WIDTH,
         borderColor: palette.divider,
+        overflow: "hidden",
       }}
       {...panHandlers}
     >

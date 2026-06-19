@@ -42,6 +42,7 @@ export const Records = () => {
                 height: THUMBNAIL_WIDTH,
                 borderWidth: BOARD_BORDER_WIDTH,
                 borderColor: palette.divider,
+                overflow: "hidden",
               }}
             >
               <Board
@@ -54,6 +55,7 @@ export const Records = () => {
                 cellWidth={cellWidth}
                 boardWidth={THUMBNAIL_INNER_WIDTH}
                 cellGap={CELL_GAP}
+                showCheckpoints={false}
               />
             </View>
           ),

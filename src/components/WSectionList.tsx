@@ -55,16 +55,9 @@ export const WSectionList = ({
           );
         }
       }}
-      ItemSeparatorComponent={() => (
-        <View
-          style={{
-            backgroundColor: palette.common.white,
-            paddingHorizontal: 24,
-          }}
-        >
-          <Divider />
-        </View>
-      )}
+      ItemSeparatorComponent={
+        <Divider style={{ backgroundColor: palette.background.default }} />
+      }
       renderSectionFooter={({ section }) => {
         const isLastSection = sections[sections.length - 1] === section;
         if (isLastSection && isScrollable) {

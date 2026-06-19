@@ -2,6 +2,7 @@ import { Text, View, ViewStyle } from "react-native";
 import { Cell } from "../Types";
 import { palette } from "../theme/palette";
 import { typography } from "../theme/typography";
+import { getCheckpointFontSize } from "../utils/getCheckpointFontSize";
 
 interface BoardProps {
   cells: Cell[][];
@@ -40,7 +41,14 @@ export const Board = ({
               }}
             >
               {showCheckpoints && cell.checkpoint !== null && (
-                <Text style={typography.h6}>{cell.checkpoint}</Text>
+                <Text
+                  style={{
+                    ...typography.h6,
+                    fontSize: getCheckpointFontSize(cellWidth),
+                  }}
+                >
+                  {cell.checkpoint}
+                </Text>
               )}
             </View>
           ))}
