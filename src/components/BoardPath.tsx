@@ -61,7 +61,7 @@ export const BoardPath = ({
             y1={from.y}
             x2={to.x}
             y2={to.y}
-            stroke={palette.divider}
+            stroke={palette.success.main}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
           />
@@ -78,7 +78,7 @@ export const BoardPath = ({
                 cy={center.y}
                 r={cellWidth * 0.3}
                 fill={palette.common.white}
-                stroke={palette.divider}
+                stroke={palette.success.main}
                 strokeWidth={circleStrokeWidth}
               />
               {showCheckpoints && (
@@ -87,7 +87,7 @@ export const BoardPath = ({
                   y={center.y}
                   dy={getCheckpointFontSize(cellWidth) * 0.05}
                   fontSize={getCheckpointFontSize(cellWidth)}
-                  fill={palette.text.primary}
+                  fill={palette.success.main}
                   textAnchor="middle"
                   alignmentBaseline="central"
                 >

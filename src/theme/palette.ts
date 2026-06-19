@@ -31,7 +31,7 @@ export const palette = {
   },
   success: {
     light: "#4caf50",
-    main: "#2e7d32",
+    main: "rgb(0, 160, 80)",
     dark: "#1b5e20",
     contrastText: "#ffffff",
   },
