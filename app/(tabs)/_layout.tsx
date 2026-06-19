@@ -4,7 +4,6 @@ import { Tabs } from "expo-router";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { palette } from "../../src/theme/palette";
-import { typography } from "../../src/theme/typography";
 import { PuzzleProvider } from "../../src/context/PuzzleProvider";
 import { isLiquidGlass } from "../../src/utils/isLiquidGlass";
 
@@ -73,12 +72,6 @@ const TabLayout = () => {
           name="records"
           options={{
             title: "Records",
-            headerShown: true,
-            headerStyle: { backgroundColor: palette.background.default },
-            headerTintColor: palette.text.primary,
-            headerTitleStyle: typography.body1,
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="list-outline" size={size} color={color} />
             ),
