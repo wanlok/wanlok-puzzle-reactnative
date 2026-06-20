@@ -3,6 +3,10 @@ import { Cell } from "../Types";
 import { palette } from "../theme/palette";
 import { typography } from "../theme/typography";
 import { getCheckpointFontSize } from "../utils/getCheckpointFontSize";
+import {
+  getCheckpointCircleRadius,
+  getCheckpointCircleStrokeWidth,
+} from "../utils/getCheckpointCircleMetrics";
 
 interface BoardProps {
   cells: Cell[][];
@@ -40,16 +44,29 @@ export const Board = ({
                 backgroundColor: palette.common.white,
               }}
             >
-              {showCheckpoints && cell.checkpoint !== null && (
-                <Text
-                  style={{
-                    ...typography.h6,
-                    fontSize: getCheckpointFontSize(cellWidth),
-                  }}
-                >
-                  {cell.checkpoint}
-                </Text>
-              )}
+              {showCheckpoints &&
+                cell.checkpoint !== null &&
+                (cell.isCheckpointHidden ? (
+                  <View
+                    style={{
+                      width: getCheckpointCircleRadius(cellWidth) * 2,
+                      height: getCheckpointCircleRadius(cellWidth) * 2,
+                      borderRadius: getCheckpointCircleRadius(cellWidth),
+                      borderWidth: getCheckpointCircleStrokeWidth(cellWidth),
+                      borderColor: palette.divider,
+                      backgroundColor: palette.common.white,
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      ...typography.h6,
+                      fontSize: getCheckpointFontSize(cellWidth),
+                    }}
+                  >
+                    {cell.checkpoint}
+                  </Text>
+                ))}
             </View>
           ))}
         </View>

@@ -102,6 +102,33 @@ const generatePath = (dimension: number, random: () => number): number[][] => {
   }
 };
 
+const pickHiddenCheckpointNumbers = (
+  numberOfCheckpoints: number,
+  random: () => number,
+): Set<number> => {
+  const middleCheckpointNumbers = Array.from(
+    { length: numberOfCheckpoints - 2 },
+    (_, i) => i + 2,
+  );
+
+  for (let i = middleCheckpointNumbers.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [middleCheckpointNumbers[i], middleCheckpointNumbers[j]] = [
+      middleCheckpointNumbers[j],
+      middleCheckpointNumbers[i],
+    ];
+  }
+
+  const maximumNumberOfHiddenCheckpoints = Math.floor(
+    middleCheckpointNumbers.length / 2,
+  );
+  const numberOfHiddenCheckpoints = Math.floor(
+    random() * (maximumNumberOfHiddenCheckpoints + 1),
+  );
+
+  return new Set(middleCheckpointNumbers.slice(0, numberOfHiddenCheckpoints));
+};
+
 const generatePuzzle = (puzzleSettings: PuzzleSettings): Cell[][] => {
   const { dimension, seed, numberOfCheckpoints } = puzzleSettings;
   const total = dimension * dimension;
@@ -113,13 +140,24 @@ const generatePuzzle = (puzzleSettings: PuzzleSettings): Cell[][] => {
         : Math.round((i * (total - 1)) / (numberOfCheckpoints - 1)) + 1,
   ).sort((first, second) => first - second);
   const checkpoints = new Set(checkpointSequences);
-  return generatePath(dimension, createRandom(seed)).map((row) =>
+
+  const random = createRandom(seed);
+  const grid = generatePath(dimension, random);
+  const hiddenCheckpointNumbers = pickHiddenCheckpointNumbers(
+    numberOfCheckpoints,
+    random,
+  );
+
+  return grid.map((row) =>
     row.map((sequence) => {
+      const checkpoint = checkpoints.has(sequence)
+        ? checkpointSequences.indexOf(sequence) + 1
+        : null;
       return {
         sequence,
-        checkpoint: checkpoints.has(sequence)
-          ? checkpointSequences.indexOf(sequence) + 1
-          : null,
+        checkpoint,
+        isCheckpointHidden:
+          checkpoint !== null && hiddenCheckpointNumbers.has(checkpoint),
         pathSequence: null,
       };
     }),

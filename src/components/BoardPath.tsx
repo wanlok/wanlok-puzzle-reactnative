@@ -3,6 +3,10 @@ import { Circle, Line, Svg, Text as SvgText } from "react-native-svg";
 import { Cell, Position } from "../Types";
 import { palette } from "../theme/palette";
 import { getCheckpointFontSize } from "../utils/getCheckpointFontSize";
+import {
+  getCheckpointCircleRadius,
+  getCheckpointCircleStrokeWidth,
+} from "../utils/getCheckpointCircleMetrics";
 
 interface BoardPathProps {
   cells: Cell[][];
@@ -38,11 +42,8 @@ export const BoardPath = ({
     strokeWidth = 16;
   }
 
-  const circleStrokeMinWidth = 2.4;
-  let circleStrokeWidth = strokeWidth * 0.1;
-  if (circleStrokeWidth < circleStrokeMinWidth) {
-    circleStrokeWidth = circleStrokeMinWidth;
-  }
+  const circleRadius = getCheckpointCircleRadius(cellWidth);
+  const circleStrokeWidth = getCheckpointCircleStrokeWidth(cellWidth);
 
   return (
     <Svg
@@ -76,12 +77,12 @@ export const BoardPath = ({
               <Circle
                 cx={center.x}
                 cy={center.y}
-                r={cellWidth * 0.3}
+                r={circleRadius}
                 fill={palette.common.white}
                 stroke={palette.success.main}
                 strokeWidth={circleStrokeWidth}
               />
-              {showCheckpoints && (
+              {showCheckpoints && !pos.cell.isCheckpointHidden && (
                 <SvgText
                   x={center.x}
                   y={center.y}

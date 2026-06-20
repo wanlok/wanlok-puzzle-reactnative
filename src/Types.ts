@@ -1,6 +1,7 @@
 export type Cell = {
   sequence: number;
   checkpoint: number | null;
+  isCheckpointHidden: boolean;
   pathSequence: number | null;
 };
 
